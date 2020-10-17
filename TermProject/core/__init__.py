@@ -18,9 +18,6 @@ def run(state):
 
     state.init()
 
-    fps = 0
-    a = time.time()
-
     while running:
         start_time = time.time()
 
