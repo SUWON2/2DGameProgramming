@@ -5,12 +5,12 @@ import core
 class GameState:
     def init(self):
         self.player = core.sprite.Sprite('./res/ball21x21.png')
-        self.player.x = core.constants.SCREEN_WIDTH / 2
-        self.player.y = core.constants.SCREEN_HEIGHT / 2
+        self.player.x = core.const.SCREEN_WIDTH / 2
+        self.player.y = core.const.SCREEN_HEIGHT / 2
         core.renderer.Add(self.player)
 
     def update(self):
-        if core.events_handler.get_key_down(SDLK_ESCAPE):
+        if core.eh.get_key_down(SDLK_ESCAPE):
             core.pop_state()
             return
 
