@@ -7,18 +7,18 @@ import core.renderer
 import core.sprite
 
 running = True
-states = None
 delta_time = 0
+states = None
 
-def run(state):
+def init(state):
+    global states
+    open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT)
+    states = [state]
+    state.init()
+
+def run():
     global states
     global delta_time
-
-    states = [state]
-
-    open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT)
-
-    state.init()
 
     while running:
         start_time = time.time()
@@ -49,10 +49,6 @@ def run(state):
 def quit():
     global running
     running = False
-
-def start_state():
-    import sys
-    run(sys.modules['__main__'])
 
 def change_state(state):
     global states
