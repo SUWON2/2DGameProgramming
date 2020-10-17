@@ -12,7 +12,10 @@ states = None
 
 def init(state):
     global states
+
     open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT)
+    hide_lattice()
+    
     states = [state]
     state.init()
 
