@@ -6,8 +6,8 @@ from title_state import TitleState
 class StartState:
     def init(self):
         self.logo = core.sprite.Sprite('res/kpu_logo.png')
-        self.logo.x = core.constants.SCREEN_WIDTH / 2
-        self.logo.y = core.constants.SCREEN_HEIGHT / 2
+        self.logo.x = core.const.SCREEN_WIDTH / 2
+        self.logo.y = core.const.SCREEN_HEIGHT / 2
         core.renderer.Add(self.logo)
 
         self.elapsed_time = 0.0
