@@ -1,29 +1,29 @@
-from pico2d import*
+from pico2d import *
 
 import core
-from game_state import GameState
+import game_state
 
-class TitleState:
-    def init(self):
-        pass
+eh = core.events_handler
 
-    def update(self):
-        if core.events_handler.get_key_down(SDLK_SPACE):
-            core.push_state(GameState())
-            return
-        elif core.events_handler.get_key_down(SDLK_ESCAPE):
-            core.pop_state()
-            return
+def init():
+    pass
 
-    def exit(self):
-        core.renderer.clear()
+def update():
+    if eh.get_key_down(SDLK_SPACE):
+        core.push_state(game_state)
+        return
+    elif eh.get_key_down(SDLK_ESCAPE):
+        core.pop_state()
+        return
 
-    def pause(self):
-        pass
+def exit():
+    pass
 
-    def resume(self):
-        pass
+def pause():
+    pass
+
+def resume():
+    pass
 
 if __name__ == '__main__':
-    core.init(TitleState())
-    core.run()
+    core.start_state()

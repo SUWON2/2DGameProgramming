@@ -1,31 +1,39 @@
-from pico2d import*
+from pico2d import *
 
 import core
-from title_state import TitleState
+import title_state
 
-class StartState:
-    def init(self):
-        self.logo = core.sprite.Sprite('res/kpu_logo.png')
-        self.logo.x = core.constants.SCREEN_WIDTH / 2
-        self.logo.y = core.constants.SCREEN_HEIGHT / 2
-        core.renderer.Add(self.logo)
+const = core.constants
+renderer = core.renderer
+sprite = core.sprite
 
-        self.elapsed_time = 0.0
+logo = None
+elapsed_time = 0
 
-    def update(self):
-        self.elapsed_time += core.delta_time
-        if self.elapsed_time >= 1.0:
-            core.change_state(TitleState())            
+def init():
+    global logo
 
-    def exit(self):
-        core.renderer.clear()
+    logo = sprite.Sprite('res/kpu_logo.png')
+    logo.x = const.SCREEN_WIDTH / 2
+    logo.y = const.SCREEN_HEIGHT / 2
+    renderer.Add(logo)
 
-    def pause(self):
-        pass
+def update():
+    global elapsed_time
 
-    def resume(self):
-        pass
+    elapsed_time += core.delta_time
+    if elapsed_time >= 1.0:
+        core.change_state(title_state)
+        return
+        
+def exit():
+    renderer.clear()
+
+def pause():
+    pass
+
+def resume():
+    pass
 
 if __name__ == '__main__':
-    core.init(StartState())
-    core.run()
+    core.start_state()
