@@ -1,32 +1,28 @@
-from pico2d import *
+from pico2d import*
 
 import core
 
-eh = core.events_handler
-renderer = core.renderer
-sprite = core.sprite
+class GameState:
+    def init(self):
+        self.player = core.sprite.Sprite('./res/ball21x21.png')
+        self.player.x = core.constants.SCREEN_WIDTH / 2
+        self.player.y = core.constants.SCREEN_HEIGHT / 2
+        core.renderer.Add(self.player)
 
-player = None
+    def update(self):
+        if core.events_handler.get_key_down(SDLK_ESCAPE):
+            core.pop_state()
+            return
 
-def init():
-    global player
-    player = sprite.Sprite('./res/ball21x21.png')
-    player.x = core.constants.SCREEN_WIDTH / 2
-    player.y = core.constants.SCREEN_HEIGHT / 2
-    renderer.Add(player)
+    def exit(self):
+        core.renderer.clear()
 
-def update():
-    if eh.get_key_down(SDLK_ESCAPE):
-        core.pop_state()
+    def pause(self):
+        pass
 
-def exit():
-    renderer.clear()
-
-def pause():
-    pass
-
-def resume():
-    pass
+    def resume(self):
+        pass
 
 if __name__ == '__main__':
-    core.start_state()
+    core.init(GameState())
+    core.run()
