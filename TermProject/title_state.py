@@ -8,10 +8,10 @@ class TitleState:
         pass
 
     def update(self):
-        if core.events_handler.get_key_down(SDLK_SPACE):
+        if core.eh.get_key_down(SDLK_SPACE):
             core.push_state(GameState())
             return
-        elif core.events_handler.get_key_down(SDLK_ESCAPE):
+        elif core.eh.get_key_down(SDLK_ESCAPE):
             core.pop_state()
             return
 
