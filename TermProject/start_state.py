@@ -4,25 +4,30 @@ import core
 import title_state
 
 const = core.constants
+renderer = core.renderer
+sprite = core.sprite
+
+logo = None
 elapsed_time = 0
-logo_image = None
 
 def init():
-    global logo_image
-    logo_image = load_image('res/kpu_logo.png')
+    global logo
+
+    logo = sprite.Sprite('res/kpu_logo.png')
+    logo.x = const.SCREEN_WIDTH / 2
+    logo.y = const.SCREEN_HEIGHT / 2
+    renderer.Add(logo)
 
 def update():
     global elapsed_time
-    global logo_image
 
     elapsed_time += core.delta_time
     if elapsed_time >= 1.0:
         core.change_state(title_state)
-
-    logo_image.draw(const.SCREEN_WIDTH / 2, const.SCREEN_HEIGHT / 2)
-
+        return
+        
 def exit():
-    pass
+    renderer.clear()
 
 def pause():
     pass

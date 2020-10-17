@@ -6,7 +6,7 @@ def init():
     pass
 
 def update():
-   pass
+    pass
 
 def exit():
     pass

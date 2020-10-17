@@ -3,6 +3,8 @@ from pico2d import *
 
 import core.constants as const
 import core.events_handler as eh
+import core.renderer
+import core.sprite
 
 running = True
 states = None
@@ -24,8 +26,10 @@ def run(state):
         if eh.update() == False:
             break
 
-        clear_canvas()
         states[-1].update()
+
+        clear_canvas()
+        core.renderer.draw()
         update_canvas()
 
         delay_time = 1.0 / const.FPS - (time.time() - start_time)
@@ -37,6 +41,8 @@ def run(state):
     while states:
         states[-1].exit()
         states.pop()
+
+    core.renderer.clear()
 
     close_canvas()
 
