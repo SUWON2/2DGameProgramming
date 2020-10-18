@@ -16,6 +16,7 @@ def init(state):
     open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, b"1")
     hide_lattice()
+    hide_cursor()
     
     states = [state]
     state.init()
