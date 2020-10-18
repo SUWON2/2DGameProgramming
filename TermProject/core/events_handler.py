@@ -33,7 +33,7 @@ def update():
             changed_keys[e.key] = True
             pressing_keys[e.key] = False
         elif e.type == SDL_MOUSEMOTION:
-            mouse_pos = (e.x - const.SCREEN_WIDTH / 2, const.SCREEN_HEIGHT / 2 - e.y)
+            mouse_pos = (e.x, const.SCREEN_HEIGHT - e.y - 1)
         elif e.type == SDL_MOUSEBUTTONDOWN:
             index = e.button - 1
             changed_buttons[index] = True
