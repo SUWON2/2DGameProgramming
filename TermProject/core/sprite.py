@@ -1,6 +1,6 @@
 from pico2d import *
 
-import core.cache_image as cimage
+import core.cache_image
 
 class Sprite:
     def __init__(self, image_path = None):
@@ -11,6 +11,7 @@ class Sprite:
         self.angle = 0.0
         self.alpha = 1.0
         self.image = None
+        self.camera_ignorer = False
         
         if image_path:
             self.set_image(image_path)
@@ -19,4 +20,4 @@ class Sprite:
         pass
 
     def set_image(self, image_path):
-        self.image = cimage.load(image_path)
+        self.image = core.cache_image.load(image_path)
