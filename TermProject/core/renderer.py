@@ -1,6 +1,7 @@
 import math
-import core.cache_image as cimage
-import core.sprite as sprite
+import core.cache_image
+import core.sprite
+import core.camera
 
 sprites = []
 
@@ -10,8 +11,10 @@ def draw():
     for spr in sprites:
         assert spr.image, "이미지가 등록되어 있지 않습니다."
         
+        to_x = spr.x - core.camera.x + core.constants.SCREEN_WIDTH / 2
+        to_y = spr.y - core.camera.y + core.constants.SCREEN_HEIGHT / 2
         spr.image.opacify(spr.alpha)
-        spr.image.rotate_draw(math.radians(spr.angle), spr.x, spr.y, spr.image.w * spr.scaleX, spr.image.h * spr.scaleY)
+        spr.image.rotate_draw(math.radians(spr.angle), to_x, to_y, spr.image.w * spr.scaleX, spr.image.h * spr.scaleY)
 
 def Add(spr):
     global sprites
@@ -28,5 +31,5 @@ def remove(spr):
 def clear():
     global sprties;
 
-    cimage.clear()
+    core.cache_image.clear()
     sprites.clear()
