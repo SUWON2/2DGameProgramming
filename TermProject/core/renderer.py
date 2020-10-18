@@ -8,17 +8,14 @@ sprites = []
 def draw():
     global sprites
 
-    offsetX = -core.camera.x + core.constants.SCREEN_WIDTH / 2
-    offsetY = -core.camera.y + core.constants.SCREEN_HEIGHT / 2
-
     for spr in sprites:
         assert spr.image, '이미지가 등록되어 있지 않습니다.'
         
         to_x = spr.x
         to_y = spr.y
         if not spr.camera_ignorer:
-            to_x += offsetX
-            to_y += offsetY
+            to_x -= core.camera.x
+            to_y -= core.camera.y
 
         spr.image.opacify(spr.alpha)
         spr.image.rotate_draw(math.radians(spr.angle), to_x, to_y, spr.image.w * spr.scaleX, spr.image.h * spr.scaleY)
