@@ -14,7 +14,7 @@ states = None
 def init(state):
     global states
 
-    open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT)
+    open_canvas(const.SCREEN_WIDTH, const.SCREEN_HEIGHT, False, const.IS_FULL_SCREEN)
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, b"1")
     hide_lattice()
     hide_cursor()
