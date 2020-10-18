@@ -8,6 +8,8 @@ class Sprite:
         self.y = 0.0
         self.scaleX = 1.0
         self.scaleY = 1.0
+        self.angle = 0.0
+        self.alpha = 1.0
         self.image = None
         
         if image_path:

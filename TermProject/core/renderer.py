@@ -1,3 +1,4 @@
+import math
 import core.cache_image as cimage
 import core.sprite as sprite
 
@@ -8,7 +9,9 @@ def draw():
 
     for spr in sprites:
         assert spr.image, "이미지가 등록되어 있지 않습니다."
-        spr.image.draw(spr.x, spr.y)
+        
+        spr.image.opacify(spr.alpha)
+        spr.image.rotate_draw(math.radians(spr.angle), spr.x, spr.y, spr.image.w * spr.scaleX, spr.image.h * spr.scaleY)
 
 def Add(spr):
     global sprites
