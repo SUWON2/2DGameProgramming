@@ -59,9 +59,6 @@ def get_key_up(key):
     global changed_keys
     return key in changed_keys and changed_keys[key] and get_key(key) == False
 
-def get_mouse_pos():
-    return mouse_pos
-
 def get_mouse_button(button):
     assert LBUTTON <= button and button < BUTTON_COUNT, '지원하지 않는 버튼입니다.'
 
