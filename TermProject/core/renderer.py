@@ -37,3 +37,5 @@ def clear():
 
     core.cache_image.clear()
     sprites.clear()
+
+    core.camera.clear()
