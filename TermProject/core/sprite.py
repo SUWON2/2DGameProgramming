@@ -8,6 +8,8 @@ class Sprite:
         self.y = 0.0
         self.scaleX = 1.0
         self.scaleY = 1.0
+        self.origin_x = 0.5
+        self.origin_y = 0.5
         self.angle = 0.0
         self.alpha = 1.0
         self.image = None

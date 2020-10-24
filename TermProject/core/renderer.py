@@ -11,8 +11,8 @@ def draw():
     for spr in sprites:
         assert spr.image, '이미지가 등록되어 있지 않습니다.'
         
-        to_x = spr.x
-        to_y = spr.y
+        to_x = spr.x + spr.image.w * (0.5 - spr.origin_x)
+        to_y = spr.y + spr.image.h * (0.5 - spr.origin_y)
         if not spr.camera_ignorer:
             to_x -= core.camera.x
             to_y -= core.camera.y
