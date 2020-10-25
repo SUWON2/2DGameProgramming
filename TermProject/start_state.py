@@ -5,17 +5,30 @@ from title_state import TitleState
 
 class StartState:
     def init(self):
-        self.logo = core.sprite.Sprite('res/kpu_logo.png')
+        self.background = core.sprite.Sprite('./res/start_state/background_piece.png')
+        self.background.scaleX = core.const.SCREEN_WIDTH / 10
+        self.background.scaleY = core.const.SCREEN_HEIGHT / 10
+        self.background.origin_x = 0.0
+        self.background.origin_y = 0.0
+        core.renderer.Add(self.background)
+
+        self.logo = core.sprite.Sprite('./res/start_state/kpu_logo.png')
         self.logo.x = core.const.SCREEN_WIDTH / 2
         self.logo.y = core.const.SCREEN_HEIGHT / 2
+        self.logo.alpha = 0.0
         core.renderer.Add(self.logo)
 
-        self.elapsed_time = 0.0
+        self.alpha_up = True
 
     def update(self):
-        self.elapsed_time += core.delta_time
-        if self.elapsed_time >= 1.0:
-            core.change_state(TitleState())            
+        if self.alpha_up:
+            self.logo.alpha += 0.5 * core.delta_time
+            if self.logo.alpha >= 0.9:
+                self.alpha_up = False
+        else:
+            self.logo.alpha -= 0.5 * core.delta_time
+            if self.logo.alpha < 0.0:
+                core.change_state(TitleState())
 
     def exit(self):
         core.renderer.clear()
