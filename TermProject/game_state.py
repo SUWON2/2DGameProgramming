@@ -36,9 +36,14 @@ class GameState:
 
         view_dir_x = self.zoom_point.x + core.camera.x - self.player.spr.x
         view_dir_y = self.zoom_point.y + core.camera.y - self.player.spr.y
+        view_dis = math.sqrt(view_dir_x ** 2 + view_dir_y ** 2)
 
-        self.__update_zoom(view_dir_x, view_dir_y)
+        if view_dis != 0.0:
+            view_dir_x /= view_dis
+            view_dir_y /= view_dis
+
         self.player.update(view_dir_x, view_dir_y)
+        self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()
 
     def exit(self):
@@ -50,16 +55,11 @@ class GameState:
     def resume(self):
         pass
 
-    def __update_zoom(self, view_dir_x, view_dir_y):
+    def __update_zoom(self, view_dir_x, view_dir_y, zoom_dis):
         self.zoom_point.x = core.eh.mouse_pos[0]
         self.zoom_point.y = core.eh.mouse_pos[1]
         self.zoom_outer.x = core.eh.mouse_pos[0]
         self.zoom_outer.y = core.eh.mouse_pos[1]
-
-        zoom_dis = math.sqrt(view_dir_x ** 2 + view_dir_y ** 2)
-        if zoom_dis != 0.0:
-            view_dir_x /= zoom_dis
-            view_dir_y /= zoom_dis
 
         self.zoom_scale = min(max(1.0, zoom_dis / 300.0), 1.5)
         self.zoom_outer.scaleX = self.zoom_scale
