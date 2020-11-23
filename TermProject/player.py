@@ -6,7 +6,7 @@ from bullet import Bullet
 
 ACC_VELOCITY = 50.0
 DEC_VELOCITY = 120.0
-MAX_VELOCITY = 700.0
+MAX_VELOCITY = 600.0
 MAX_ATTACK_DELAY = 0.15
 
 class Player:
