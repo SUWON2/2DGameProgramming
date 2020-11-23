@@ -6,7 +6,7 @@ from bullet import Bullet
 ACC_VELOCITY = 50.0
 DEC_VELOCITY = 120.0
 MAX_VELOCITY = 500.0
-MAX_ATTACK_DELAY = 0.2
+MAX_ATTACK_DELAY = 0.15
 
 class Player:
     def __init__(self):
@@ -68,6 +68,7 @@ class Player:
             bullet = Bullet(self.spr.x, self.spr.y, view_dir_x, view_dir_y, self.spr.angle + 90)
             self.bullets.append(bullet)
 
+            core.camera.shake(1.8, 0.05)
             self.attack_delay = MAX_ATTACK_DELAY
 
         for i in self.bullets:
