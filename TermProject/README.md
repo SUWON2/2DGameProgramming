@@ -159,3 +159,22 @@ TOP3 스코어를 표시하는 UI와 START, EXIT 버튼으로 구성
 [8주차]
 1. 부족한 구간 보충 & 마무리
 ```
+
+# 5: 현재까의 진행 상황
+1주차: 완료  
+2주차: 일시 정지 스테이트를 제외하고 모두 완료  
+3주차: 완료  
+4주차: 맵 경계선 구현하고 나머진 진행중  
+
+# 6: 커밋 현재 상황
+![Commit](https://user-images.githubusercontent.com/55614876/99954273-d331de00-2dc5-11eb-80e4-9f8469e09662.PNG)
+
+# 7: 게임 스테이트의 오브젝트 설명
+* 전체적인 구성  
+![게임 스테이트 구성도](https://user-images.githubusercontent.com/55614876/99956285-222d4280-2dc9-11eb-91c4-844c2f1a8ccb.PNG)
+* 플레이어 생성 & 위치, 회전 구현 코드  
+![플레이어 생성](https://user-images.githubusercontent.com/55614876/99956998-548b6f80-2dca-11eb-8daa-9d05a956aff9.PNG)
+![플레이어  이동, 회전](https://user-images.githubusercontent.com/55614876/99957000-55240600-2dca-11eb-97bd-00645dc2ed69.PNG)  
+* 이벤트 처리  
+![events_handler](https://user-images.githubusercontent.com/55614876/99957289-cfed2100-2dca-11eb-85c7-b61d0f0cfefb.PNG)
+![클릭 처리](https://user-images.githubusercontent.com/55614876/99957387-f743ee00-2dca-11eb-817f-90679d3cd900.PNG)
