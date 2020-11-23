@@ -33,7 +33,7 @@ def remove(spr):
     sprites.remove(spr)
 
 def clear():
-    global sprties;
+    global sprites;
 
     core.cache_image.clear()
     sprites.clear()
