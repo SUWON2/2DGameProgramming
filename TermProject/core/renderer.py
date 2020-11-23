@@ -5,8 +5,10 @@ import core.camera
 
 sprites = []
 
-def draw():
+def update():
     global sprites
+
+    core.camera.update()
 
     for spr in sprites:
         assert spr.image, '이미지가 등록되어 있지 않습니다.'

@@ -34,7 +34,7 @@ def run():
         states[-1].update()
 
         clear_canvas()
-        core.renderer.draw()
+        core.renderer.update()
         update_canvas()
 
         delay_time = 1.0 / const.FPS - (time.time() - start_time)
