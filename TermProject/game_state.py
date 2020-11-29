@@ -29,6 +29,10 @@ class GameState:
 
         self.zoom_scale = 0.7
 
+        self.bgm = load_music('./res/Metallic Mistress.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
+
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
             core.pop_state()

@@ -13,6 +13,12 @@ class Player:
     def __init__(self):
         self.spr = core.sprite.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
+        
+        self.attack_sound = load_wav('./res/s_shot2.wav')
+        self.attack_sound.set_volume(128)
+
+        self.attack_sound_1 = load_wav('./res/s_shot.wav')
+        self.attack_sound_1.set_volume(64)
 
         self.speed_x = 0.0
         self.speed_y = 0.0
@@ -67,8 +73,10 @@ class Player:
             self.attack_delay -= core.delta_time
 
         if core.eh.get_mouse_button(core.eh.LBUTTON) and self.attack_delay <= 0.0:
-            bullet = Bullet(self.spr.x, self.spr.y, self.spr.angle + random.randrange(85, 95), self.bullet_kind)
+            bullet = Bullet(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), self.bullet_kind)
             self.bullets.append(bullet)
+
+            self.attack_sound.play()
 
             core.camera.shake(1.8, 0.05)
 
