@@ -11,7 +11,7 @@ MAX_ATTACK_DELAY = 0.15
 
 class Player:
     def __init__(self):
-        self.spr = core.sprite.Sprite('./res/player.png')
+        self.spr = core.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
         
         self.attack_sound = load_wav('./res/s_shot2.wav')

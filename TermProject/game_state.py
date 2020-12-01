@@ -8,22 +8,22 @@ class GameState:
     def init(self):
         hide_cursor()
 
-        background = core.sprite.Sprite('./res/background.png')
+        background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
         background.x = core.const.SCREEN_WIDTH / 2
         background.y = core.const.SCREEN_HEIGHT / 2
         core.renderer.Add(background)
 
-        boundary = core.sprite.Sprite('./res/boundary.png')
+        boundary = core.Sprite('./res/boundary.png')
         core.renderer.Add(boundary)
 
         self.player = Player()
 
-        self.zoom_point = core.sprite.Sprite('./res/zoom_point.png')
+        self.zoom_point = core.Sprite('./res/zoom_point.png')
         self.zoom_point.camera_ignorer = True
         core.renderer.Add(self.zoom_point)
 
-        self.zoom_outer = core.sprite.Sprite('./res/zoom_outer.png')
+        self.zoom_outer = core.Sprite('./res/zoom_outer.png')
         self.zoom_outer.camera_ignorer = True
         core.renderer.Add(self.zoom_outer)
 

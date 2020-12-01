@@ -5,14 +5,14 @@ from title_state import TitleState
 
 class StartState:
     def init(self):
-        self.background = core.sprite.Sprite('./res/start_state/background_piece.png')
+        self.background = core.Sprite('./res/start_state/background_piece.png')
         self.background.scaleX = core.const.SCREEN_WIDTH / 10
         self.background.scaleY = core.const.SCREEN_HEIGHT / 10
         self.background.origin_x = 0.0
         self.background.origin_y = 0.0
         core.renderer.Add(self.background)
 
-        self.logo = core.sprite.Sprite('./res/start_state/kpu_logo.png')
+        self.logo = core.Sprite('./res/start_state/kpu_logo.png')
         self.logo.x = core.const.SCREEN_WIDTH / 2
         self.logo.y = core.const.SCREEN_HEIGHT / 2
         self.logo.alpha = 0.0

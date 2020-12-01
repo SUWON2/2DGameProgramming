@@ -8,13 +8,13 @@ UI_MOVE_SPEED = 7.0
 
 class TitleState:
     def init(self):
-        background = core.sprite.Sprite('./res/background.png')
+        background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
         background.x = core.const.SCREEN_WIDTH / 2
         background.y = core.const.SCREEN_HEIGHT / 2
         core.renderer.Add(background)
 
-        title_background = core.sprite.Sprite('./res/title_background.png')
+        title_background = core.Sprite('./res/title_background.png')
         title_background.x = core.const.SCREEN_WIDTH / 2
         title_background.y = core.const.SCREEN_HEIGHT / 2
         core.renderer.Add(title_background)

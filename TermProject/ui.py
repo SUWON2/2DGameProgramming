@@ -2,7 +2,7 @@ import core
 
 class UI:
     def __init__(self, idle_image_path, contact_image_path = None):
-        self.spr = core.sprite.Sprite(idle_image_path)
+        self.spr = core.Sprite(idle_image_path)
         core.renderer.Add(self.spr)
 
         self.idle_image_path = idle_image_path

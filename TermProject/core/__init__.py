@@ -4,7 +4,7 @@ from pico2d import *
 import core.constants as const
 import core.events_handler as eh
 import core.renderer
-import core.sprite
+from core.sprite import Sprite
 import core.camera
 
 running = True
