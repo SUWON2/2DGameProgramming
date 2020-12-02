@@ -93,7 +93,7 @@ class Player:
             bullet.init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
             
             self.attack_sound.play()
-            core.camera.shake(1.8, 0.05)
+            core.camera.shake(2.0, 0.05)
 
             self.attack_delay = MAX_ATTACK_DELAY
             self.bullet_kind = not self.bullet_kind
