@@ -83,12 +83,12 @@ class Player:
             if self.bullet_index < len(self.bullets):
                 bullet = self.bullets[self.bullet_index]
             else:
-                self.bullet_index = 0
-
-                bullet = self.bullets[self.bullet_index]
+                bullet = self.bullets[0]
                 if bullet.spr.active:
                     bullet = Bullet(self.bullet_kind)
                     self.bullets.append(bullet)
+                else:
+                    self.bullet_index = 0
 
             bullet.init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
             
