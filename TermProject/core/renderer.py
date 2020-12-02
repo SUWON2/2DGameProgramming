@@ -11,6 +11,9 @@ def update():
     core.camera.update()
 
     for spr in sprites:
+        if spr.active == False:
+            continue
+
         assert spr.image, '이미지가 등록되어 있지 않습니다.'
         
         to_x = spr.x + spr.image.w * spr.scaleX * (0.5 - spr.origin_x)

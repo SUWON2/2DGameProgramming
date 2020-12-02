@@ -12,6 +12,7 @@ class Sprite:
         self.origin_y = 0.5
         self.angle = 0.0
         self.alpha = 1.0
+        self.active = True
         self.image = None
         self.camera_ignorer = False
         
