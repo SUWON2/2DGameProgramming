@@ -3,10 +3,15 @@ from pico2d import*
 
 import core
 from player import Player
+from monster import Monster
 
 class GameState:
     def init(self):
         hide_cursor()
+        
+        self.bgm = load_music('./res/Metallic Mistress.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
         background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
@@ -17,8 +22,6 @@ class GameState:
         boundary = core.Sprite('./res/boundary.png')
         core.renderer.Add(boundary)
 
-        self.player = Player()
-
         self.zoom_point = core.Sprite('./res/zoom_point.png')
         self.zoom_point.camera_ignorer = True
         core.renderer.Add(self.zoom_point)
@@ -27,11 +30,13 @@ class GameState:
         self.zoom_outer.camera_ignorer = True
         core.renderer.Add(self.zoom_outer)
 
-        self.zoom_scale = 0.7
+        self.player = Player()
 
-        self.bgm = load_music('./res/Metallic Mistress.mp3')
-        self.bgm.set_volume(64)
-        self.bgm.repeat_play()
+        self.monsters = []
+        self.monsters.append(Monster())
+        self.monsters.append(Monster())
+
+        self.monsters[0].spr.x = -300
 
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
@@ -46,7 +51,11 @@ class GameState:
             view_dir_x /= view_dis
             view_dir_y /= view_dis
 
-        self.player.update(view_dir_x, view_dir_y)
+        self.player.update(view_dir_x, view_dir_y, self.monsters)
+
+        for i in self.monsters:
+            i.update()
+
         self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()
 
@@ -65,9 +74,9 @@ class GameState:
         self.zoom_outer.x = core.eh.mouse_pos[0]
         self.zoom_outer.y = core.eh.mouse_pos[1]
 
-        self.zoom_scale = min(max(1.0, zoom_dis / 300.0), 1.5)
-        self.zoom_outer.scaleX = self.zoom_scale
-        self.zoom_outer.scaleY = self.zoom_scale
+        zoom_scale = min(max(1.0, zoom_dis / 300.0), 1.5)
+        self.zoom_outer.scaleX = zoom_scale
+        self.zoom_outer.scaleY = zoom_scale
 
     def __update_camera(self):
         CAMERA_VELOCITY = 8
