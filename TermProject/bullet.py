@@ -19,6 +19,7 @@ class Bullet:
     def init(self, player_x, player_y, angle, monsters):
         self.spr.active = True
         self.spr.angle = angle
+        self.spr.alpha = 0.0
         self.dir_x = math.cos(math.radians(angle))
         self.dir_y = math.sin(math.radians(angle))
 
@@ -77,6 +78,7 @@ class Bullet:
         if self.spr.active == False:
             return
 
+        self.spr.alpha = min(1.0, self.spr.alpha + core.delta_time * 7.0)
         self.spr.x += self.dir_x * VELOCITY * core.delta_time
         self.spr.y += self.dir_y * VELOCITY * core.delta_time
 
