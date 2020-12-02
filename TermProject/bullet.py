@@ -12,11 +12,11 @@ class Bullet:
         self.spr = Sprite(self.RESOURCES[kind])
         self.spr.active = False
         core.renderer.Add(self.spr)
-
+        
     def __del__(self):
         pass
 
-    def init(self, player_x, player_y, angle, monsters):
+    def init(self, x, y, angle, monsters):
         self.spr.active = True
         self.spr.angle = angle
         self.spr.alpha = 0.0
@@ -25,8 +25,8 @@ class Bullet:
 
         # 총알의 초기 위치를 지정합니다.
         offset = (self.spr.image.w) * 0.15
-        self.spr.x = player_x + self.dir_x * offset
-        self.spr.y = player_y + self.dir_y * offset
+        self.spr.x = x + self.dir_x * offset
+        self.spr.y = y + self.dir_y * offset
 
         # 목표 몬스터를 찾습니다.
         self.target_mob = None
