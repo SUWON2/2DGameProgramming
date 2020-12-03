@@ -36,6 +36,9 @@ class Bullet:
         self.target_mob = None
         mob_dis_sq_min = 999999.0
         for mob in monsters:
+            if mob.hp <= 0.0:
+                return
+
             mob_half_w = mob.collision_box_w * 0.5
             mob_half_h = mob.collision_box_h * 0.5
             mob_left = mob.spr.x - mob_half_w
