@@ -10,15 +10,23 @@ class Monster:
     HIT_PARTICLE0_PATH = './res/mob_hit_particle_0.png'
     HIT_PARTICLE1_PATH = './res/mob_hit_particle_1.png'
     PARTICLE_MAX = 10
+    MAX_HP = 10
 
     def __init__(self):
         self.spr = core.Sprite(self.SPR_PATH)
         core.renderer.Add(self.spr)
 
-        self.die_sound = load_wav('./res/hit.wav')
-        self.die_sound.set_volume(48)
+        self.hp_spr = core.Sprite('./res/monster_hp.png')
+        core.renderer.Add(self.hp_spr)
 
-        self.hp = 10
+        self.hp_back_spr = core.Sprite('./res/monster_hp_back.png')
+        core.renderer.Add(self.hp_back_spr)
+
+        self.die_sound = load_wav('./res/hit.wav')
+        self.die_sound.set_volume(32)
+
+        self.hp = self.MAX_HP
+
         self.move_velocity = 180.0
         self.collision_box_w = 48
         self.collision_box_h = 48
@@ -41,8 +49,9 @@ class Monster:
         if self.hp <= 0.0:
             self.spr.scaleX += 5.0 * core.delta_time
             self.spr.scaleY = self.spr.scaleX
-            if self.spr.scaleX >= 2.0:
+            if self.spr.scaleX >= 1.5:
                 self.spr.active = False
+                self.hp_back_spr.active = False
                 self.die_sound.play()
             return
 
@@ -65,6 +74,12 @@ class Monster:
             final_velocity = self.move_velocity * core.delta_time
             self.spr.x += dir_x * final_velocity
             self.spr.y += dir_y * final_velocity
+
+        self.hp_back_spr.x = self.spr.x
+        self.hp_back_spr.y = self.spr.y - self.spr.image.h * 0.5 - 10.0
+
+        self.hp_spr.x = self.hp_back_spr.x - self.hp_spr.image.w * (1 - self.hp_spr.scaleX) * 0.5
+        self.hp_spr.y = self.hp_back_spr.y
 
     def hit(self, bullet_dir_x, bullet_dir_y):
         if self.hp <= 0:
@@ -112,3 +127,4 @@ class Monster:
         self.spr.scaleY = self.spr.scaleX
 
         self.hp -= 1
+        self.hp_spr.scaleX = self.hp / self.MAX_HP
