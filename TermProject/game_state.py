@@ -10,7 +10,7 @@ class GameState:
         hide_cursor()
         
         self.bgm = load_music('./res/Metallic Mistress.mp3')
-        self.bgm.set_volume(64)
+        self.bgm.set_volume(48)
         self.bgm.repeat_play()
 
         background = core.Sprite('./res/background.png')
