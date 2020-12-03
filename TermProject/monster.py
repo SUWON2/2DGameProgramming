@@ -56,6 +56,8 @@ class Monster:
                 self.spr.active = False
                 self.hp_back_spr.active = False
                 self.die_sound.play()
+
+                core.camera.shake(7.0, 0.1)
             return
 
         self.spr.scaleX = min(1.0, self.spr.scaleX + 3.0 * core.delta_time)
