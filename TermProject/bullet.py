@@ -102,7 +102,7 @@ class Bullet:
             # 타겟 몬스터에 도달한 경우 비활성화 시킵니다
             if dis_sq <= 2000.0:
                 self.spr.active = False
-                self.target_mob.hit()
+                self.target_mob.hit(self.dir_x, self.dir_y)
 
     def __is_monster_collided_by_ray_casting(self, mob_left, mob_right, mob_bottom, mob_top, slope_x, slope_y):
         # 왼쪽 변에 충돌했는지 검사합니다.
