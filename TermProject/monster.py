@@ -26,6 +26,9 @@ class Monster:
         for i in self.hit1_particles:
             i.update()
 
+        self.spr.scaleX = min(1.0, self.spr.scaleX + 3.0 * core.delta_time)
+        self.spr.scaleY = self.spr.scaleX
+
     def hit(self):
         self.hp -= 1
         if self.hp <= 0:
@@ -40,3 +43,6 @@ class Monster:
         self.hit_particle_index += 1
         if self.hit_particle_index >= self.HIT_PARTICLE_MAX:
             self.hit_particle_index = 0
+
+        self.spr.scaleX = 0.7
+        self.spr.scaleY = self.spr.scaleX
