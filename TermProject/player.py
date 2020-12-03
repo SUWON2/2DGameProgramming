@@ -15,11 +15,8 @@ class Player:
         self.spr = core.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
         
-        self.attack_sound = load_wav('./res/s_shot2.wav')
+        self.attack_sound = load_wav('./res/attack_sound.wav')
         self.attack_sound.set_volume(128)
-
-        self.attack_sound_1 = load_wav('./res/s_shot.wav')
-        self.attack_sound_1.set_volume(64)
 
         self.speed_x = 0.0
         self.speed_y = 0.0

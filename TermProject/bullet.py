@@ -1,5 +1,6 @@
 import math
 
+from pico2d import *
 import core
 from core.sprite import Sprite
 
@@ -12,6 +13,9 @@ class Bullet:
         self.spr = Sprite(self.RESOURCES[kind])
         self.spr.active = False
         core.renderer.Add(self.spr)
+
+        self.burst_sound = load_wav('./res/bullet_sound.wav')
+        self.burst_sound.set_volume(8)
         
     def __del__(self):
         pass
@@ -73,6 +77,7 @@ class Bullet:
             if mob_dis_sq_min >= dis_sq and self.__is_monster_collided_by_ray_casting(mob_left, mob_right, mob_bottom, mob_top, self.dir_y / self.dir_x, self.dir_x / self.dir_y):
                 self.target_mob = mob
                 mob_dis_sq_min = dis_sq
+                self.burst_sound.play()
 
     def update(self):
         if self.spr.active == False:
