@@ -16,6 +16,9 @@ def update():
         y += random.uniform(-shake_amount, shake_amount)
 
         shake_duration -= core.delta_time
+        if shake_duration < 0.0:
+            shake_amount = 0.0
+            shake_duration = 0.0
 
 def clear():
     x = 0.0
@@ -25,5 +28,8 @@ def shake(amount, duration):
     global shake_duration
     global shake_amount
 
-    shake_amount = amount
-    shake_duration = duration
+    if shake_amount < amount:
+        shake_amount = amount
+
+    if shake_duration < duration:
+        shake_duration = duration
