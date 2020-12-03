@@ -16,7 +16,7 @@ class Monster:
         core.renderer.Add(self.spr)
 
         self.die_sound = load_wav('./res/hit.wav')
-        self.die_sound.set_volume(64)
+        self.die_sound.set_volume(48)
 
         self.hp = 10
         self.move_velocity = 180.0
