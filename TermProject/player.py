@@ -4,6 +4,7 @@ import random
 import core
 from bullet import Bullet
 from monster import Monster
+from particle import Particle
 
 ACC_VELOCITY = 80.0
 DEC_VELOCITY = 120.0
@@ -28,6 +29,12 @@ class Player:
 
         self.bullets = []
         self.bullets.append(Bullet(self.bullet_kind))
+
+        self.bullet_particles = []
+        self.bullet_particles.append(Particle('./res/bullet_t_0.png', 1, 1))
+        self.bullet_particles.append(Particle('./res/bullet_t_1.png', 1, 1))
+        self.bullet_particles.append(Particle('./res/bullet_t_2.png', 1, 1))
+        self.bullet_particle_index = 0;
 
     def __del__(self):
         pass
@@ -88,7 +95,27 @@ class Player:
                     self.bullet_index = 0
 
             bullet.init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
-            
+
+            # 총알 이펙트를 출력합니다.
+            bullet_particle = self.bullet_particles[self.bullet_particle_index]
+            bullet_particle.min_random_x = -10.0
+            bullet_particle.max_random_x = 10.0
+            bullet_particle.min_random_y = -10.0
+            bullet_particle.max_random_y = 10.0
+            bullet_particle.move_dir_x = -view_dir_x
+            bullet_particle.move_dir_y = -view_dir_y
+            bullet_particle.move_velocity = random.uniform(700.0, 900.0)
+            bullet_particle.move_dec_velocity = 45.0
+            bullet_particle.max_angle = random.randrange(-360, 360)
+            bullet_particle.angle_speed = abs(bullet_particle.max_angle) * 250.0 / 90.0
+            bullet_particle.min_scale = 1.0
+            bullet_particle.alpha_speed = 3.0
+            bullet_particle.init(self.spr.x, self.spr.y, 0.4)
+
+            self.bullet_particle_index += 1
+            if self.bullet_particle_index >= len(self.bullet_particles):
+                self.bullet_particle_index = 0
+
             self.attack_sound.play()
             core.camera.shake(2.0, 0.05)
 
@@ -97,4 +124,7 @@ class Player:
             self.bullet_index += 1
 
         for i in self.bullets:
+            i.update()
+
+        for i in self.bullet_particles:
             i.update()
