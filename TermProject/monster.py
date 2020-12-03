@@ -1,4 +1,6 @@
 import random
+
+from pico2d.pico2d import load_wav
 import core
 from particle import Particle
 
@@ -12,7 +14,10 @@ class Monster:
         self.spr = core.Sprite(self.SPR_PATH)
         core.renderer.Add(self.spr)
 
-        self.hp = 100
+        self.die_sound = load_wav('./res/hit.wav')
+        self.die_sound.set_volume(64)
+
+        self.hp = 10
         self.collision_box_w = 48
         self.collision_box_h = 48
 
@@ -27,13 +32,23 @@ class Monster:
             self.hit1_particles[i].update()
             self.piece_particles[i].update()
 
+        if self.spr.active == False:
+            return
+
+        if self.hp <= 0.0:
+            self.spr.scaleX += 5.0 * core.delta_time
+            self.spr.scaleY = self.spr.scaleX
+            if self.spr.scaleX >= 2.0:
+                self.spr.active = False
+                self.die_sound.play()
+            return
+
         self.spr.scaleX = min(1.0, self.spr.scaleX + 3.0 * core.delta_time)
         self.spr.scaleY = self.spr.scaleX
 
     def hit(self, bullet_dir_x, bullet_dir_y):
-        self.hp -= 1
         if self.hp <= 0:
-            self.spr.active = False
+            return
 
         hit0_particle = self.hit0_particles[self.particle_index]
         hit0_particle.min_random_x = -20.0
@@ -75,3 +90,5 @@ class Monster:
 
         self.spr.scaleX = 0.7
         self.spr.scaleY = self.spr.scaleX
+
+        self.hp -= 1
