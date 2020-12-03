@@ -54,7 +54,7 @@ class GameState:
         self.player.update(view_dir_x, view_dir_y, self.monsters)
 
         for i in self.monsters:
-            i.update()
+            i.update(self.player.spr.x, self.player.spr.y)
 
         self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()

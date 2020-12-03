@@ -1,3 +1,4 @@
+import math
 import random
 
 from pico2d.pico2d import load_wav
@@ -18,6 +19,7 @@ class Monster:
         self.die_sound.set_volume(64)
 
         self.hp = 10
+        self.move_velocity = 180.0
         self.collision_box_w = 48
         self.collision_box_h = 48
 
@@ -26,7 +28,7 @@ class Monster:
         self.piece_particles = [Particle(self.SPR_PATH, 1, 2) for i in range(self.PARTICLE_MAX)]
         self.particle_index = 0
 
-    def update(self):
+    def update(self, player_x, player_y):
         for i in range(self.PARTICLE_MAX):
             self.hit0_particles[i].update()
             self.hit1_particles[i].update()
@@ -35,6 +37,7 @@ class Monster:
         if self.spr.active == False:
             return
 
+        # 몬스터가 죽은 경우 효과를 발생시키고 비활성화 시킵니다.
         if self.hp <= 0.0:
             self.spr.scaleX += 5.0 * core.delta_time
             self.spr.scaleY = self.spr.scaleX
@@ -45,6 +48,23 @@ class Monster:
 
         self.spr.scaleX = min(1.0, self.spr.scaleX + 3.0 * core.delta_time)
         self.spr.scaleY = self.spr.scaleX
+
+        dis_x = player_x - self.spr.x
+        dis_y = player_y - self.spr.y
+        dis_sq = dis_x * dis_x + dis_y * dis_y
+
+        # 일정 범위 내에 플레이어가 존재하면 따라가도록 처리합니다.
+        if dis_sq <= 100000.0:
+            dir_x = 0.0
+            dir_y = 0.0
+            dis = math.sqrt(dis_sq)
+            if dis != 0.0:
+                dir_x = dis_x / dis
+                dir_y = dis_y / dis
+
+            final_velocity = self.move_velocity * core.delta_time
+            self.spr.x += dir_x * final_velocity
+            self.spr.y += dir_y * final_velocity
 
     def hit(self, bullet_dir_x, bullet_dir_y):
         if self.hp <= 0:
