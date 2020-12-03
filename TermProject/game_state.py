@@ -3,7 +3,7 @@ from pico2d import*
 
 import core
 from player import Player
-from monster import Monster
+from monster import *
 
 class GameState:
     def init(self):
@@ -33,10 +33,13 @@ class GameState:
         self.player = Player()
 
         self.monsters = []
-        self.monsters.append(Monster())
-        self.monsters.append(Monster())
+        self.monsters.append(Monster1())
+        self.monsters.append(Monster2())
+        self.monsters.append(Monster3())
+        self.monsters.append(Monster4())
 
         self.monsters[0].spr.x = -300
+        self.monsters[3].spr.x = 300
 
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
