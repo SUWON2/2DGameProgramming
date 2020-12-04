@@ -41,10 +41,10 @@ class GameState:
         self.player = Player()
 
         self.monsters = []
-        self.monsters.append(Monster1(-300.0, 0.0))
-        self.monsters.append(Monster2(0.0, -300.0))
-        self.monsters.append(Monster3(0.0, 300.0))
-        self.monsters.append(Monster4(300.0, 0.0))
+        self.monster_kinds = [ Monster1, Monster2, Monster3, Monster4 ]
+        self.monster_max_count = 1
+        self.monster_creator_delay = 2.0
+        self.monster_creator_elapsed_time = 0.0
 
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
@@ -61,9 +61,11 @@ class GameState:
 
         self.player.update(view_dir_x, view_dir_y, self.monsters)
 
+        # 몬스터를 업데이트합니다.
         for mob in self.monsters:
-            if mob.update(self.player.spr.x, self.player.spr.y) == False:
-                self.score += mob.score
+                if mob.update(self.player.spr.x, self.player.spr.y) == False:
+                    self.score += mob.score
+                    self.monsters.remove(mob)
 
         if self.view_score < self.score:
             self.view_score = min(int(self.view_score + 120.0 * core.delta_time), self.score)
@@ -71,6 +73,20 @@ class GameState:
 
         self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()
+
+        # 몬스터를 주기적으로 생성합니다.
+        self.monster_creator_elapsed_time = min(self.monster_creator_elapsed_time + core.delta_time, self.monster_creator_delay)
+        if self.monster_creator_elapsed_time >= self.monster_creator_delay:
+            if len(self.monsters) < self.monster_max_count:
+                x = random.uniform(-core.const.BOUNDARY_HALF_W + 10.0, core.const.BOUNDARY_HALF_W - 10.0)
+                y = random.uniform(-core.const.BOUNDARY_HALF_H + 10.0, core.const.BOUNDARY_HALF_H - 10.0)
+                monster_kind = self.monster_kinds[random.randrange(0, len(self.monster_kinds))]
+
+                mob = monster_kind()
+                mob.init(x, y)
+                self.monsters.append(mob)
+
+                self.monster_creator_elapsed_time = 0.0
 
     def exit(self):
         core.renderer.clear()

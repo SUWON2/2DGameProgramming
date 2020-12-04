@@ -10,12 +10,10 @@ class Monster:
     HIT_PARTICLE1_PATH = './res/mob_hit_particle_1.png'
     PARTICLE_MAX = 10
 
-    def __init__(self, x, y, kind):
+    def __init__(self, kind):
         image_path = './res/monster_' + str(kind) + '_' + str(random.randrange(0, 6)) + '.png'
 
         self.spr = core.Sprite(image_path)
-        self.spr.x = x
-        self.spr.y = y
         self.spr.active = False
         core.renderer.Add(self.spr)
 
@@ -33,6 +31,30 @@ class Monster:
         self.collision_box_w = 48
         self.collision_box_h = 48
 
+        self.creator_particle = Particle('./res/mob_creator.png', 1, 1)
+        self.creator_particle.min_scale = 0.0
+        self.creator_particle.max_scale = 1.0
+        self.creator_particle.scale_speed = 2.0
+        self.creator_particle.max_angle = 360.0 * 5
+        self.creator_particle.angle_speed = 150.0
+        self.creator_particle.min_alpha = 1.0
+
+        self.hit0_particles = [Particle(self.HIT_PARTICLE0_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
+        self.hit1_particles = [Particle(self.HIT_PARTICLE1_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
+        self.piece_particles = [Particle(image_path, 1, 2) for i in range(self.PARTICLE_MAX)]
+        self.particle_index = 0
+
+    def __del__(self):
+        pass
+
+    def init(self, x, y):
+        self.spr.x = x
+        self.spr.y = y
+        self.spr.active = False
+
+        self.hp_spr.active = False
+        self.hp_back_spr.active = False
+
         self.max_hp = 10
         self.hp = self.max_hp
 
@@ -45,19 +67,7 @@ class Monster:
         self.creator = False
         self.score = 10
 
-        self.creator_particle = Particle('./res/mob_creator.png', 1, 1)
-        self.creator_particle.min_scale = 0.0
-        self.creator_particle.max_scale = 1.0
-        self.creator_particle.scale_speed = 2.0
-        self.creator_particle.max_angle = 360.0 * 5
-        self.creator_particle.angle_speed = 150.0
-        self.creator_particle.min_alpha = 1.0
         self.creator_particle.init(self.spr.x, self.spr.y, 1.0)
-
-        self.hit0_particles = [Particle(self.HIT_PARTICLE0_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
-        self.hit1_particles = [Particle(self.HIT_PARTICLE1_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
-        self.piece_particles = [Particle(image_path, 1, 2) for i in range(self.PARTICLE_MAX)]
-        self.particle_index = 0
 
     # return: 몬스터가 바로 직전에 죽은 경우 F, 그게 아닌 경우 T를 반환
     def update(self, player_x, player_y):
@@ -69,7 +79,8 @@ class Monster:
                 self.hp_spr.active = True
                 self.hp_back_spr.active = True
                 self.creator = True
-            return
+            else:
+                return
 
         # 파티클을 업데이트합니다.
         for i in range(self.PARTICLE_MAX):
@@ -215,21 +226,21 @@ class Monster:
         self.hp_spr.scaleX = self.hp / self.max_hp
 
 class Monster1(Monster):
-    def __init__(self, x, y):
-        super().__init__(x, y, 1)
+    def __init__(self):
+        super().__init__(1)
 
         self.recognition_range = 200000.0
 
 class Monster2(Monster):
-    def __init__(self, x, y):
-        super().__init__(x, y, 2)
+    def __init__(self):
+        super().__init__(2)
 
         self.move_velocity = 300.0
         self.score = 12
 
 class Monster3(Monster):
-    def __init__(self, x, y):
-        super().__init__(x, y, 3)
+    def __init__(self):
+        super().__init__(3)
 
         self.max_hp = 20
         self.hp = self.max_hp
@@ -237,8 +248,8 @@ class Monster3(Monster):
         self.score = 12
 
 class Monster4(Monster):
-    def __init__(self, x, y):
-        super().__init__(x, y, 4)
+    def __init__(self):
+        super().__init__(4)
 
         self.max_hp = 15
         self.hp = self.max_hp
