@@ -30,6 +30,14 @@ class GameState:
         self.zoom_outer.camera_ignorer = True
         core.renderer.Add(self.zoom_outer)
 
+        self.score = 0
+        self.view_score = 0
+        self.score_text = core.Text('./res/Kontakt.ttf', 36)
+        self.score_text.x = 550.0
+        self.score_text.y = core.const.SCREEN_HEIGHT - 60.0
+        self.score_text.text = 'SCORE: 0'
+        core.renderer.Add(self.score_text)
+
         self.player = Player()
 
         self.monsters = []
@@ -58,8 +66,13 @@ class GameState:
 
         self.player.update(view_dir_x, view_dir_y, self.monsters)
 
-        for i in self.monsters:
-            i.update(self.player.spr.x, self.player.spr.y)
+        for mob in self.monsters:
+            if mob.update(self.player.spr.x, self.player.spr.y) == False:
+                self.score += mob.score
+
+        if self.view_score < self.score:
+            self.view_score = min(int(self.view_score + 120.0 * core.delta_time), self.score)
+            self.score_text.text = 'score: ' + str(self.view_score)
 
         self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()
