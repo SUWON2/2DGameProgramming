@@ -95,9 +95,7 @@ class Bullet:
         self.spr.y += self.dir_y * VELOCITY * core.delta_time
 
         # 화면에 벗어난 경우 비활성화 시킵니다.
-        BOUNDARY_HALF_W = 1942.0 * 0.5
-        BOUNDARY_HALF_H = 1102.0 * 0.5
-        if self.spr.x <= -BOUNDARY_HALF_W or self.spr.x >= BOUNDARY_HALF_W or self.spr.y <= -BOUNDARY_HALF_H or self.spr.y >= BOUNDARY_HALF_H:
+        if self.spr.x <= -core.const.BOUNDARY_HALF_W or self.spr.x >= core.const.BOUNDARY_HALF_W or self.spr.y <= -core.const.BOUNDARY_HALF_H or self.spr.y >= core.const.BOUNDARY_HALF_H:
             self.spr.active = False
             return
 
