@@ -42,6 +42,10 @@ class Particle:
         self.max_alpha = 1.0
         self.alpha_speed = 0.0
 
+    def __del__(self):
+        for piece in self.pieces:
+            core.renderer.remove(piece)
+
     def init(self, x, y, life_time):
         self.cur_count = random.randrange(self.min_count, self.max_count + 1)
         for i in range(self.cur_count):

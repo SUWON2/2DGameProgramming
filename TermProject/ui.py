@@ -9,7 +9,7 @@ class UI:
         self.contact_image_path = contact_image_path
 
     def __del__(self):
-        pass
+        core.renderer.remove(self.spr)
 
     def update(self):
         if not self.contact_image_path is None:

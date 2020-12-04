@@ -21,7 +21,7 @@ class Bullet:
         self.burst_sound.set_volume(24)
         
     def __del__(self):
-        pass
+        core.renderer.remove(self.spr)
 
     def init(self, x, y, angle, monsters):
         self.spr.active = True

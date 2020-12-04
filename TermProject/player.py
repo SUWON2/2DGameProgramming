@@ -34,7 +34,7 @@ class Player:
         self.bullet_particle_index = 0;
 
     def __del__(self):
-        pass
+        core.renderer.remove(self.spr)
 
     def update(self, view_dir_x, view_dir_y, monsters):
         move_dir_x = core.eh.get_key(SDLK_d) - core.eh.get_key(SDLK_a)
