@@ -22,7 +22,7 @@ class Monster:
         self.hp_back_spr = core.Sprite('./res/monster_hp_back.png')
         core.renderer.Add(self.hp_back_spr)
 
-        self.die_sound = load_wav('./res/hit.wav')
+        self.die_sound = load_wav('./res/boom.wav')
         self.die_sound.set_volume(32)
 
         self.collision_box_w = 48

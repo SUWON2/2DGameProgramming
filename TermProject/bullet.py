@@ -14,8 +14,11 @@ class Bullet:
         self.spr.active = False
         core.renderer.Add(self.spr)
 
+        self.shoot_sound = load_wav('./res/shoot_sound.wav')
+        self.shoot_sound.set_volume(128)
+
         self.burst_sound = load_wav('./res/bullet_sound.wav')
-        self.burst_sound.set_volume(8)
+        self.burst_sound.set_volume(24)
         
     def __del__(self):
         pass
@@ -80,7 +83,8 @@ class Bullet:
             if mob_dis_sq_min >= dis_sq and self.__is_monster_collided_by_ray_casting(mob_left, mob_right, mob_bottom, mob_top, self.dir_y / self.dir_x, self.dir_x / self.dir_y):
                 self.target_mob = mob
                 mob_dis_sq_min = dis_sq
-                self.burst_sound.play()
+
+        self.shoot_sound.play()
 
     def update(self):
         if self.spr.active == False:
@@ -106,6 +110,7 @@ class Bullet:
             if dis_sq <= 2000.0:
                 self.spr.active = False
                 self.target_mob.hit(self.dir_x, self.dir_y)
+                self.burst_sound.play()
 
     def __is_monster_collided_by_ray_casting(self, mob_left, mob_right, mob_bottom, mob_top, slope_x, slope_y):
         # 왼쪽 변에 충돌했는지 검사합니다.

@@ -12,13 +12,12 @@ MAX_VELOCITY = 500.0
 MAX_ATTACK_DELAY = 0.15
 
 class Player:
+    BULLET_MAX_COUNT = 20
+
     def __init__(self):
         self.spr = core.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
         
-        self.attack_sound = load_wav('./res/attack_sound.wav')
-        self.attack_sound.set_volume(128)
-
         self.speed_x = 0.0
         self.speed_y = 0.0
 
@@ -26,9 +25,7 @@ class Player:
 
         self.bullet_index = 0
         self.bullet_kind = 0
-
-        self.bullets = []
-        self.bullets.append(Bullet(self.bullet_kind))
+        self.bullets = [Bullet(self.bullet_kind) for i in range(0, self.BULLET_MAX_COUNT)]
 
         self.bullet_particles = []
         self.bullet_particles.append(Particle('./res/bullet_t_0.png', 1, 1))
@@ -84,17 +81,22 @@ class Player:
             bullet = None
 
             # 총알을 재활용합니다.
-            if self.bullet_index < len(self.bullets):
-                bullet = self.bullets[self.bullet_index]
-            else:
-                bullet = self.bullets[0]
-                if bullet.spr.active:
-                    bullet = Bullet(self.bullet_kind)
-                    self.bullets.append(bullet)
-                else:
-                    self.bullet_index = 0
+            self.bullets[self.bullet_index].init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
+            self.bullet_index += 1
+            if self.bullet_index >= self.BULLET_MAX_COUNT:
+                self.bullet_index = 0
 
-            bullet.init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
+            self.attack_delay = MAX_ATTACK_DELAY
+            self.bullet_kind = not self.bullet_kind
+            # if self.bullet_index < len(self.bullets):
+            #     bullet = self.bullets[self.bullet_index]
+            # else:
+            #     bullet = self.bullets[0]
+            #     if bullet.spr.active:
+            #         bullet = Bullet(self.bullet_kind)
+            #         self.bullets.append(bullet)
+            #     else:
+            #         self.bullet_index = 0
 
             # 총알 이펙트를 출력합니다.
             bullet_particle = self.bullet_particles[self.bullet_particle_index]
@@ -116,12 +118,7 @@ class Player:
             if self.bullet_particle_index >= len(self.bullet_particles):
                 self.bullet_particle_index = 0
 
-            self.attack_sound.play()
             core.camera.shake(2.0, 0.05)
-
-            self.attack_delay = MAX_ATTACK_DELAY
-            self.bullet_kind = not self.bullet_kind
-            self.bullet_index += 1
 
         for i in self.bullets:
             i.update()
