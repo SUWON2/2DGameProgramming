@@ -34,6 +34,10 @@ class Monster:
         self.move_velocity = 180.0
         self.recognition_range = 120000.0
 
+        self.aimless_dir_x = 0.0
+        self.aimless_dir_y = 0.0
+        self.aimless_turn_delay = 0.0
+
         self.score = 10
 
         self.hit0_particles = [Particle(self.HIT_PARTICLE0_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
@@ -71,6 +75,7 @@ class Monster:
         dis_x = player_x - self.spr.x
         dis_y = player_y - self.spr.y
         dis_sq = dis_x * dis_x + dis_y * dis_y
+        final_velocity = self.move_velocity * core.delta_time
 
         # 일정 범위 내에 플레이어가 존재하면 따라가도록 처리합니다.
         if dis_sq <= self.recognition_range:
@@ -81,10 +86,52 @@ class Monster:
                 dir_x = dis_x / dis
                 dir_y = dis_y / dis
 
-            final_velocity = self.move_velocity * core.delta_time
-            self.spr.x += dir_x * final_velocity
-            self.spr.y += dir_y * final_velocity
-            self.spr.angle = math.degrees(math.atan2(dis_y, dis_x))
+            to_x = self.spr.x + dir_x * final_velocity
+            if -core.const.BOUNDARY_HALF_W < to_x and to_x < core.const.BOUNDARY_HALF_W:
+                self.spr.x = to_x
+            else:
+                dir_x = 0.0
+
+            to_y = self.spr.y + dir_y * final_velocity
+            if -core.const.BOUNDARY_HALF_H < to_y and to_y < core.const.BOUNDARY_HALF_H:
+                self.spr.y = to_y
+            else:
+                dir_y = 0.0
+
+            self.spr.angle = math.degrees(math.atan2(dir_y, dir_x))
+            self.aimless_turn_delay = 0.0
+        # 일정 범위 내에 플레이어가 없으면 서성이도록 처리합니다.
+        else:
+            to_x = 0.0
+            to_y = 0.0
+            self.aimless_turn_delay -= core.delta_time
+
+            while True:
+                # 이동 방향을 구합니다.
+                if self.aimless_turn_delay <= 0.0:
+                    if random.randrange(0, 4) < 3:
+                        self.spr.angle = random.uniform(-180.0, 180.0)
+                        radian = math.radians(self.spr.angle)
+                        self.aimless_dir_x = math.cos(radian)
+                        self.aimless_dir_y = math.sin(radian)
+                    else:
+                        self.aimless_dir_x = 0.0
+                        self.aimless_dir_y = 0.0
+
+                    self.aimless_turn_delay = 4.0
+
+                to_x = self.spr.x + self.aimless_dir_x * final_velocity
+                to_y = self.spr.y + self.aimless_dir_y * final_velocity
+
+                # 화면에 벗어나는 이동 방향인 경우 새로운 이동 방향을 구합니다.
+                if to_x <= -core.const.BOUNDARY_HALF_W or to_x >= core.const.BOUNDARY_HALF_W or to_y <= -core.const.BOUNDARY_HALF_H or to_y >= core.const.BOUNDARY_HALF_H:
+                    self.aimless_turn_delay = 0.0
+                    continue
+                else:
+                    break
+
+            self.spr.x = to_x
+            self.spr.y = to_y
 
         self.hp_back_spr.x = self.spr.x
         self.hp_back_spr.y = self.spr.y - self.spr.image.h * 0.5 - 10.0

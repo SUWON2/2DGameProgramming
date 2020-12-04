@@ -70,8 +70,15 @@ class Player:
             final_speed_x *= abs(final_speed_x) / speed_size
             final_speed_y *= abs(final_speed_y) / speed_size
 
-        self.spr.x += final_speed_x * core.delta_time
-        self.spr.y += final_speed_y * core.delta_time
+        to_x = self.spr.x + final_speed_x * core.delta_time
+        to_y = self.spr.y + final_speed_y * core.delta_time
+
+        if -core.const.BOUNDARY_HALF_W < to_x and to_x < core.const.BOUNDARY_HALF_W:
+            self.spr.x = to_x
+
+        if -core.const.BOUNDARY_HALF_H < to_y and to_y < core.const.BOUNDARY_HALF_H:
+            self.spr.y = to_y
+
         self.spr.angle = math.degrees(math.atan2(view_dir_y, view_dir_x)) - 90.0
 
         if self.attack_delay >= 0.0:
@@ -88,15 +95,6 @@ class Player:
 
             self.attack_delay = MAX_ATTACK_DELAY
             self.bullet_kind = not self.bullet_kind
-            # if self.bullet_index < len(self.bullets):
-            #     bullet = self.bullets[self.bullet_index]
-            # else:
-            #     bullet = self.bullets[0]
-            #     if bullet.spr.active:
-            #         bullet = Bullet(self.bullet_kind)
-            #         self.bullets.append(bullet)
-            #     else:
-            #         self.bullet_index = 0
 
             # 총알 이펙트를 출력합니다.
             bullet_particle = self.bullet_particles[self.bullet_particle_index]
