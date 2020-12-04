@@ -41,15 +41,10 @@ class GameState:
         self.player = Player()
 
         self.monsters = []
-        self.monsters.append(Monster1())
-        self.monsters.append(Monster2())
-        self.monsters.append(Monster3())
-        self.monsters.append(Monster4())
-
-        self.monsters[0].spr.x = -300
-        self.monsters[1].spr.y = -300
-        self.monsters[2].spr.y = 300
-        self.monsters[3].spr.x = 300
+        self.monsters.append(Monster1(-300.0, 0.0))
+        self.monsters.append(Monster2(0.0, -300.0))
+        self.monsters.append(Monster3(0.0, 300.0))
+        self.monsters.append(Monster4(300.0, 0.0))
 
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):

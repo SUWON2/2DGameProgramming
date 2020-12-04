@@ -39,7 +39,7 @@ class Bullet:
         self.target_mob = None
         mob_dis_sq_min = 999999.0
         for mob in monsters:
-            if mob.hp <= 0.0:
+            if mob.spr.active == False:
                 continue
 
             mob_half_w = mob.collision_box_w * 0.5
