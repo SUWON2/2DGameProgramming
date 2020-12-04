@@ -118,7 +118,7 @@ class Player:
             if self.bullet_particle_index >= len(self.bullet_particles):
                 self.bullet_particle_index = 0
 
-            core.camera.shake(2.0, 0.05)
+            core.camera.shake(3.0, 0.05)
 
         for i in self.bullets:
             i.update()
