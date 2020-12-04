@@ -56,11 +56,11 @@ def remove(obj):
 
     obj_type = type(obj)
     if obj_type == core.sprite.Sprite:
-        assert obj in sprites, '등록되지 않은 스프라이트를 제거할 수 없습니다.'
-        sprites.remove(obj)
+        if obj in sprites:
+            sprites.remove(obj)
     elif obj_type == core.text.Text:
-        assert obj in texts, '등록되지 않은 폰트를 제거할 수 없습니다.'
-        texts.remove(obj)
+        if obj in sprites:
+            texts.remove(obj)
     else:
         assert False, 'Sprite 혹은 Font 타입만 지원합니다.'
 

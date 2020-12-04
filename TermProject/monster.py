@@ -45,7 +45,9 @@ class Monster:
         self.particle_index = 0
 
     def __del__(self):
-        pass
+        core.renderer.remove(self.spr)
+        core.renderer.remove(self.hp_spr)
+        core.renderer.remove(self.hp_back_spr)
 
     def init(self, x, y):
         self.spr.x = x
