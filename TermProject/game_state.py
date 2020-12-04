@@ -39,6 +39,8 @@ class GameState:
         self.monsters.append(Monster4())
 
         self.monsters[0].spr.x = -300
+        self.monsters[1].spr.y = -300
+        self.monsters[2].spr.y = 300
         self.monsters[3].spr.x = 300
 
     def update(self):
