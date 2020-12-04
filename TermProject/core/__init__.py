@@ -5,6 +5,7 @@ import core.constants as const
 import core.events_handler as eh
 import core.renderer
 from core.sprite import Sprite
+from core.text import Text
 import core.camera
 
 running = True
