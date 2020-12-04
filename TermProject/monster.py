@@ -34,11 +34,14 @@ class Monster:
         self.move_velocity = 180.0
         self.recognition_range = 120000.0
 
+        self.score = 10
+
         self.hit0_particles = [Particle(self.HIT_PARTICLE0_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
         self.hit1_particles = [Particle(self.HIT_PARTICLE1_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
         self.piece_particles = [Particle(image_path, 1, 2) for i in range(self.PARTICLE_MAX)]
         self.particle_index = 0
 
+    # return: 몬스터가 바로 직전에 죽은 경우 F, 그게 아닌 경우 T를 반환
     def update(self, player_x, player_y):
         for i in range(self.PARTICLE_MAX):
             self.hit0_particles[i].update()
@@ -46,7 +49,7 @@ class Monster:
             self.piece_particles[i].update()
 
         if self.spr.active == False:
-            return
+            return True
 
         # 몬스터가 죽은 경우 효과를 발생시키고 비활성화 시킵니다.
         if self.hp <= 0.0:
@@ -56,9 +59,11 @@ class Monster:
                 self.spr.active = False
                 self.hp_back_spr.active = False
                 self.die_sound.play()
-
                 core.camera.shake(7.0, 0.1)
-            return
+                
+                return False
+
+            return True
 
         self.spr.scaleX = min(1.0, self.spr.scaleX + 3.0 * core.delta_time)
         self.spr.scaleY = self.spr.scaleX
@@ -86,6 +91,8 @@ class Monster:
 
         self.hp_spr.x = self.hp_back_spr.x - self.hp_spr.image.w * (1 - self.hp_spr.scaleX) * 0.5
         self.hp_spr.y = self.hp_back_spr.y
+
+        return True
 
     def hit(self, bullet_dir_x, bullet_dir_y):
         if self.hp <= 0:
@@ -146,6 +153,7 @@ class Monster2(Monster):
         super().__init__(2)
 
         self.move_velocity = 300.0
+        self.score = 12
 
 class Monster3(Monster):
     def __init__(self):
@@ -154,6 +162,7 @@ class Monster3(Monster):
         self.max_hp = 20
         self.hp = self.max_hp
         self.move_velocity = 120.0
+        self.score = 12
 
 class Monster4(Monster):
     def __init__(self):
@@ -163,3 +172,4 @@ class Monster4(Monster):
         self.hp = self.max_hp
         self.move_velocity = 230.0
         self.recognition_range = 150000.0
+        self.score = 15
