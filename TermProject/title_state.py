@@ -11,6 +11,7 @@ class TitleState:
         self.__init()
         
     def update(self):
+        
         self.start_button.update()
         self.exit_button.update()
 
@@ -43,13 +44,18 @@ class TitleState:
         pass
 
     def pause(self):
-        pass
+        core.renderer.clear()
+        del self.bgm
 
     def resume(self):
         self.__init()
 
     def __init(self):
         show_cursor()
+
+        self.bgm = load_music('./res/DST-TowerDefenseTheme.mp3')
+        self.bgm.set_volume(128)
+        self.bgm.repeat_play()
 
         background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
