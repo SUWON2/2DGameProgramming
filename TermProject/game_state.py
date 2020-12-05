@@ -79,6 +79,10 @@ class GameState:
             core.pop_state()
             return
 
+        # if core.eh.get_key_down(SDLK_SPACE):
+        #     if self.player.spr.alpha >= 1.0:
+        #         self.player.hit()
+
         view_dir_x = self.zoom_point.x + core.camera.x - self.player.spr.x
         view_dir_y = self.zoom_point.y + core.camera.y - self.player.spr.y
         view_dis = math.sqrt(view_dir_x ** 2 + view_dir_y ** 2)
@@ -88,8 +92,15 @@ class GameState:
             view_dir_y /= view_dis
 
         self.player.update(view_dir_x, view_dir_y, self.monsters)
+        player_half_w = self.player.spr.image.w * 0.5
+        player_half_h = self.player.spr.image.h * 0.5
+        player_left = self.player.spr.x - player_half_w
+        player_right = self.player.spr.x + player_half_w
+        player_bottom = self.player.spr.y - player_half_h
+        player_top = self.player.spr.y + player_half_h
 
-        # 몬스터를 업데이트합니다.
+
+        # 몬스터를 업데이트하고, 플레이어와 충돌 처리를 확인합니다
         for mob in self.monsters:
                 if mob.update(self.player.spr.x, self.player.spr.y) == False:
                     self.score += mob.score
@@ -97,6 +108,17 @@ class GameState:
                 
                 if mob.dead_time >= 2.0:
                     self.monsters.remove(mob)
+                else:
+                    mob_half_w = mob.collision_box_w * 0.5
+                    mob_half_h = mob.collision_box_h * 0.5
+                    mob_left = mob.spr.x - mob_half_w
+                    mob_right = mob.spr.x + mob_half_w
+                    mob_bottom = mob.spr.y - mob_half_h
+                    mob_top = mob.spr.y + mob_half_h
+
+                    if player_left <= mob_right and player_right >= mob_left and player_bottom <= mob_top and player_top >= mob_bottom:
+                        if self.player.spr.alpha >= 1.0:
+                            self.player.hit()
 
         self.__update_score()
         self.__update_guage()

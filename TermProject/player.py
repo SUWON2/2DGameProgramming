@@ -15,8 +15,21 @@ class Player:
     BULLET_MAX_COUNT = 20
 
     def __init__(self):
+        self.hit_sound = load_wav('./res/boom.wav')
+        self.hit_sound.set_volume(48)
+
         self.spr = core.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
+
+        self.hp = 5
+        self.hp_sprs = []
+        for i in range(self.hp):
+            hp_spr = core.Sprite('./res/circle_hp_' + str(i) + '.png')
+            hp_spr.active = False
+            self.hp_sprs.append(hp_spr)
+            core.renderer.Add(hp_spr)
+
+        self.hp_sprs[self.hp - 1].active = True
 
         self.skill = core.Sprite('./res/skill.png')
         self.skill.active = False
@@ -26,8 +39,6 @@ class Player:
         self.speed_y = 0.0
 
         self.attack_delay = 0.0
-        self.skill_on = False
-
         self.bullet_index = 0
         self.bullet_kind = 0
         self.bullets = [Bullet(self.bullet_kind) for i in range(0, self.BULLET_MAX_COUNT)]
@@ -44,8 +55,11 @@ class Player:
         self.bullet_particle_index = 0;
 
     def __del__(self):
-        core.renderer.remove(self.spr)
+        for i in range(5):
+            core.renderer.remove(self.hp_sprs[i])
+
         core.renderer.remove(self.skill)
+        core.renderer.remove(self.spr)
 
     def update(self, view_dir_x, view_dir_y, monsters):
         move_dir_x = core.eh.get_key(SDLK_d) - core.eh.get_key(SDLK_a)
@@ -99,8 +113,6 @@ class Player:
 
         # 총알 발사를 처리합니다.
         if core.eh.get_mouse_button(core.eh.LBUTTON) and self.attack_delay <= 0.0:
-            bullet = None
-
             # 총알을 재활용합니다.
             self.bullets[self.bullet_index].init(self.spr.x, self.spr.y, self.spr.angle + random.randrange(87, 94), monsters)
             self.bullet_index += 1
@@ -155,6 +167,18 @@ class Player:
         elif self.skill_guage >= 100.0:
             self.explode()
 
+        # hp를 표시합니다.
+        if self.hp >= 0:
+            hp_spr = self.hp_sprs[self.hp - 1]
+            hp_spr.x = self.spr.x
+            hp_spr.y = self.spr.y
+
+            hp_spr.angle -= core.delta_time * 150.0
+            if hp_spr.angle <= 0.0:
+                hp_spr.angle = 360.0
+        
+        self.spr.alpha = min(1.0, self.spr.alpha + core.delta_time * 0.3)
+
     def explode(self):
         self.skill.active = True
         self.skill.x = self.spr.x
@@ -163,3 +187,20 @@ class Player:
         self.skill.scaleY = 1.0
         self.skill.angle = self.spr.angle
         core.camera.shake(10.0, 0.5)
+
+    def hit(self):
+        if self.hp <= 0.0:
+            return
+
+        self.hp -= 1
+        self.hp_sprs[self.hp].active = False
+
+        if self.hp > 0:
+            hp_spr = self.hp_sprs[self.hp - 1]
+            hp_spr.active = True
+            hp_spr.x = self.spr.x
+            hp_spr.y = self.spr.y
+
+        self.spr.alpha = 0.2
+        self.hit_sound.play()
+        core.camera.shake(5.0, 0.5)
