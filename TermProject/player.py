@@ -17,11 +17,16 @@ class Player:
     def __init__(self):
         self.spr = core.Sprite('./res/player.png')
         core.renderer.Add(self.spr)
+
+        self.skill = core.Sprite('./res/skill.png')
+        self.skill.active = False
+        core.renderer.Add(self.skill)
         
         self.speed_x = 0.0
         self.speed_y = 0.0
 
         self.attack_delay = 0.0
+        self.skill_on = False
 
         self.bullet_index = 0
         self.bullet_kind = 0
@@ -40,6 +45,7 @@ class Player:
 
     def __del__(self):
         core.renderer.remove(self.spr)
+        core.renderer.remove(self.skill)
 
     def update(self, view_dir_x, view_dir_y, monsters):
         move_dir_x = core.eh.get_key(SDLK_d) - core.eh.get_key(SDLK_a)
@@ -91,6 +97,7 @@ class Player:
 
         self.dash_guage = min(self.dash_guage + core.delta_time * 15.0, 100.0)
 
+        # 총알 발사를 처리합니다.
         if core.eh.get_mouse_button(core.eh.LBUTTON) and self.attack_delay <= 0.0:
             bullet = None
 
@@ -130,3 +137,29 @@ class Player:
 
         for i in self.bullet_particles:
             i.update()
+
+        # 스킬을 처리합니다.
+        if self.skill.active:
+            MAX_SIZE = 80.0
+            self.skill.scaleX = min(self.skill.scaleX + core.delta_time * 200.0, MAX_SIZE)
+            self.skill.scaleY = self.skill.scaleX
+
+            for mob in monsters:
+                if mob.spr.active:
+                    mob.hit(view_dir_x, view_dir_y)
+
+            if self.skill.scaleX >= MAX_SIZE:
+                self.skill.active = False
+                self.skill_guage = 0.0
+                self.skill_view_guage = 0.0
+        elif self.skill_guage >= 100.0:
+            self.explode()
+
+    def explode(self):
+        self.skill.active = True
+        self.skill.x = self.spr.x
+        self.skill.y = self.spr.y
+        self.skill.scaleX = 1.0
+        self.skill.scaleY = 1.0
+        self.skill.angle = self.spr.angle
+        core.camera.shake(10.0, 0.5)

@@ -31,6 +31,7 @@ class Monster:
         self.collision_box_w = 48
         self.collision_box_h = 48
         self.score = 10
+        self.dead_time = 0.0
 
         self.creator_particle = Particle('./res/mob_creator.png', 1, 1)
         self.creator_particle.min_scale = 0.0
@@ -91,6 +92,8 @@ class Monster:
             self.piece_particles[i].update()
 
         if self.spr.active == False:
+            if self.hp <= 0.0:
+                self.dead_time += core.delta_time
             return True
 
         # 몬스터가 죽은 경우 효과를 발생시키고 비활성화 시킵니다.
@@ -214,7 +217,7 @@ class Monster:
         piece_particle.angle_speed = abs(piece_particle.max_angle) * 250.0 / 90.0
         piece_particle.max_scale = 0.35
         piece_particle.scale_speed = 1.0
-        piece_particle.min_alpha = 1.0
+        piece_particle.min_alpha = random.uniform(0.35, 1.0)
         piece_particle.init(self.spr.x, self.spr.y, 1.5)
 
         self.particle_index += 1

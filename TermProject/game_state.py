@@ -74,7 +74,6 @@ class GameState:
         self.dash_guage_spr.scaleX = 0.0
         core.renderer.Add(self.dash_guage_spr)
 
-
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
             core.pop_state()
@@ -95,6 +94,8 @@ class GameState:
                 if mob.update(self.player.spr.x, self.player.spr.y) == False:
                     self.score += mob.score
                     self.player.skill_guage = min(self.player.skill_guage + random.uniform(5.0, 7.0), 100.0)
+                
+                if mob.dead_time >= 2.0:
                     self.monsters.remove(mob)
 
         self.__update_score()
