@@ -1,9 +1,11 @@
+from core.constants import SCREEN_HEIGHT
 import math
 from pico2d import*
 
 import core
 from player import Player
 from monster import *
+from ui import UI
 
 class GameState:
     def init(self):
@@ -79,17 +81,54 @@ class GameState:
 
         self.game_over = False
         self.game_over_elapsed_time = 0.0
-
         self.screen_change_background = None
+
+        self.is_pause = False
+
+        self.resume_button = UI('./res/resume_idle_button.png', 'res/resume_contact_button.png')
+        self.resume_button.spr.camera_ignorer = True
+        self.resume_button.spr.x = core.const.SCREEN_WIDTH / 2
+        self.resume_button.spr.y = -self.resume_button.spr.image.h
+        self.resume_button.spr.origin_x = 1.0
+
+        self.exit_button = UI('./res/ingame_exit_idle_button.png', 'res/ingame_exit_contact_button.png')
+        self.exit_button.spr.camera_ignorer = True
+        self.exit_button.spr.x = core.const.SCREEN_WIDTH / 2
+        self.exit_button.spr.y = -self.exit_button.spr.image.h
+        self.exit_button.spr.origin_x = 0.0
 
     def update(self):
         if self.game_over:
             self.game_over_elapsed_time += core.delta_time
-            if self.game_over_elapsed_time >= 2.0:
+            if self.game_over_elapsed_time >= 1.0:
                 self.screen_change_background.alpha += core.delta_time * 0.7
                 if self.screen_change_background.alpha >= 1.0:
                     core.pop_state()
             return
+
+        if core.eh.get_key_down(SDLK_ESCAPE):
+            self.is_pause = True
+            show_cursor()
+
+        if self.is_pause:
+            self.resume_button.update()
+            self.resume_button.move_to(self.resume_button.spr.x, SCREEN_HEIGHT * 0.5, 7.0)
+
+            self.exit_button.update()
+            self.exit_button.move_to(self.exit_button.spr.x, SCREEN_HEIGHT * 0.5, 7.0)
+            
+            if self.resume_button.is_pressed():
+                self.is_pause = False
+                hide_cursor()
+
+            if self.exit_button.is_pressed():
+                self.game_over = True
+                self.__create_screen_change_background()
+            
+            return
+        else:
+            self.resume_button.move_to(self.resume_button.spr.x, -self.resume_button.spr.image.h, 15.0)
+            self.exit_button.move_to(self.exit_button.spr.x, -self.exit_button.spr.image.h, 15.0)
             
         view_dir_x = self.zoom_point.x + core.camera.x - self.player.spr.x
         view_dir_y = self.zoom_point.y + core.camera.y - self.player.spr.y
@@ -134,12 +173,7 @@ class GameState:
                             self.game_over = True
                             self.game_over_sound.play()
 
-                            self.screen_change_background = core.Sprite('./res/screen_change_background.png')
-                            self.screen_change_background.camera_ignorer = True
-                            self.screen_change_background.x = core.const.SCREEN_WIDTH / 2
-                            self.screen_change_background.y = core.const.SCREEN_HEIGHT / 2
-                            self.screen_change_background.alpha = 0.0
-                            core.renderer.Add(self.screen_change_background)
+                            self.__create_screen_change_background()
                             return
 
         self.__update_score()
@@ -200,6 +234,14 @@ class GameState:
         target_y = self.player.spr.y - core.const.SCREEN_HEIGHT / 2
         core.camera.x += (target_x - core.camera.x) * CAMERA_VELOCITY * core.delta_time
         core.camera.y += (target_y - core.camera.y) * CAMERA_VELOCITY * core.delta_time
+
+    def __create_screen_change_background(self):
+        self.screen_change_background = core.Sprite('./res/screen_change_background.png')
+        self.screen_change_background.camera_ignorer = True
+        self.screen_change_background.x = core.const.SCREEN_WIDTH / 2
+        self.screen_change_background.y = core.const.SCREEN_HEIGHT / 2
+        self.screen_change_background.alpha = 0.0
+        core.renderer.Add(self.screen_change_background)
 
 if __name__ == '__main__':
     core.init(GameState())
