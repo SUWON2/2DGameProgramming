@@ -6,9 +6,9 @@ from bullet import Bullet
 from monster import Monster
 from particle import Particle
 
-ACC_VELOCITY = 80.0
-DEC_VELOCITY = 120.0
-MAX_VELOCITY = 500.0
+ACC_VELOCITY = 100.0
+DEC_VELOCITY = 60.0
+MAX_VELOCITY = 600.0
 MAX_ATTACK_DELAY = 0.15
 
 class Player:

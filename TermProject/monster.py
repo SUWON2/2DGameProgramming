@@ -42,7 +42,7 @@ class Monster:
 
         self.hit0_particles = [Particle(self.HIT_PARTICLE0_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
         self.hit1_particles = [Particle(self.HIT_PARTICLE1_PATH, 1, 1) for i in range(self.PARTICLE_MAX)]
-        self.piece_particles = [Particle(image_path, 1, 2) for i in range(self.PARTICLE_MAX)]
+        self.piece_particles = [Particle(image_path, 2, 5) for i in range(self.PARTICLE_MAX)]
         self.particle_index = 0
 
     def __del__(self):
@@ -208,14 +208,14 @@ class Monster:
         piece_particle.max_random_y = 50.0
         piece_particle.move_dir_x = bullet_dir_x
         piece_particle.move_dir_y = bullet_dir_y
-        piece_particle.move_velocity = 450.0
-        piece_particle.move_dec_velocity = 25.0
+        piece_particle.move_velocity = random.randrange(600.0, 800.0)
+        piece_particle.move_dec_velocity = 30.0
         piece_particle.max_angle = random.randrange(-90, 90)
         piece_particle.angle_speed = abs(piece_particle.max_angle) * 250.0 / 90.0
         piece_particle.max_scale = 0.35
         piece_particle.scale_speed = 1.0
         piece_particle.min_alpha = 1.0
-        piece_particle.init(self.spr.x, self.spr.y, 0.7)
+        piece_particle.init(self.spr.x, self.spr.y, 1.5)
 
         self.particle_index += 1
         if self.particle_index >= self.PARTICLE_MAX:

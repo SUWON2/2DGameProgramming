@@ -18,7 +18,7 @@ class Bullet:
         self.shoot_sound.set_volume(128)
 
         self.burst_sound = load_wav('./res/bullet_sound.wav')
-        self.burst_sound.set_volume(24)
+        self.burst_sound.set_volume(8)
         
     def __del__(self):
         core.renderer.remove(self.spr)
