@@ -4,7 +4,7 @@ from pico2d import *
 import core
 from core.sprite import Sprite
 
-VELOCITY = 3500.0
+VELOCITY = 4000.0
 
 class Bullet:
     RESOURCES = [ './res/Bullet_0.png', './res/Bullet_1.png' ]

@@ -6,7 +6,6 @@ from bullet import Bullet
 from monster import Monster
 from particle import Particle
 
-MAX_ATTACK_DELAY = 0.15
 MAX_DASH_DELAY = 0.3
 DASH_COST = 3.0
 
@@ -47,7 +46,9 @@ class Player:
         self.speed_x = 0.0
         self.speed_y = 0.0
 
+        self.max_attack_delay = 0.145
         self.attack_delay = 0.0
+
         self.bullet_index = 0
         self.bullet_kind = 0
         self.bullets = [Bullet(self.bullet_kind) for i in range(0, self.BULLET_MAX_COUNT)]
@@ -134,7 +135,7 @@ class Player:
             if self.bullet_index >= self.BULLET_MAX_COUNT:
                 self.bullet_index = 0
 
-            self.attack_delay = MAX_ATTACK_DELAY
+            self.attack_delay = self.max_attack_delay
             self.bullet_kind = not self.bullet_kind
 
             # 총알 이펙트를 출력합니다.
@@ -227,8 +228,6 @@ class Player:
         
         self.spr.alpha = min(1.0, self.spr.alpha + core.delta_time * 0.3)
 
-        print(self.max_velocity)
-
     def explode(self):
         self.skill.active = True
         self.skill.x = self.spr.x
@@ -246,6 +245,7 @@ class Player:
 
         self.hp -= 1
         self.hp_sprs[self.hp].active = False
+        self.max_attack_delay -= 0.007
 
         if self.hp > 0:
             hp_spr = self.hp_sprs[self.hp - 1]

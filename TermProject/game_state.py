@@ -98,25 +98,25 @@ class GameState:
 
         # 몬스터를 업데이트하고, 플레이어와 충돌 처리를 확인합니다
         for mob in self.monsters:
-                if mob.update(self.player.spr.x, self.player.spr.y) == False:
-                    self.score += mob.score
-                    self.player.skill_guage = min(self.player.skill_guage + random.uniform(5.0, 7.0), 100.0)
-                
-                if mob.dead_time >= 2.0:
-                    self.monsters.remove(mob)
-                    continue
-                
-                if mob.creator and mob.spr.active > 0.0:
-                    mob_half_w = mob.collision_box_w * 0.5
-                    mob_half_h = mob.collision_box_h * 0.5
-                    mob_left = mob.spr.x - mob_half_w
-                    mob_right = mob.spr.x + mob_half_w
-                    mob_bottom = mob.spr.y - mob_half_h
-                    mob_top = mob.spr.y + mob_half_h
+            if mob.update(self.player.spr.x, self.player.spr.y) == False:
+                self.score += mob.score
+                self.player.skill_guage = min(self.player.skill_guage + random.uniform(5.0, 7.0), 100.0)
+            
+            if mob.dead_time >= 2.0:
+                self.monsters.remove(mob)
+                continue
+            
+            if mob.creator and mob.spr.active > 0.0:
+                mob_half_w = mob.collision_box_w * 0.5
+                mob_half_h = mob.collision_box_h * 0.5
+                mob_left = mob.spr.x - mob_half_w
+                mob_right = mob.spr.x + mob_half_w
+                mob_bottom = mob.spr.y - mob_half_h
+                mob_top = mob.spr.y + mob_half_h
 
-                    if player_left <= mob_right and player_right >= mob_left and player_bottom <= mob_top and player_top >= mob_bottom:
-                        if self.player.spr.alpha >= 1.0:
-                            self.player.hit()
+                if player_left <= mob_right and player_right >= mob_left and player_bottom <= mob_top and player_top >= mob_bottom:
+                    if self.player.spr.alpha >= 1.0:
+                        self.player.hit()
 
         self.__update_score()
         self.__update_guage()
