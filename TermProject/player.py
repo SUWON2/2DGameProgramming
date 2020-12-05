@@ -30,6 +30,9 @@ class Player:
 
         self.hp_sprs[self.hp - 1].active = True
 
+        self.skill_sound = load_wav('./res/s_big_lazer.wav')
+        self.skill_sound.set_volume(48)
+
         self.skill = core.Sprite('./res/skill.png')
         self.skill.active = False
         core.renderer.Add(self.skill)
@@ -233,6 +236,8 @@ class Player:
         self.skill.scaleX = 1.0
         self.skill.scaleY = 1.0
         self.skill.angle = self.spr.angle
+        
+        self.skill_sound.play()
         core.camera.shake(10.0, 0.5)
 
     def hit(self):
