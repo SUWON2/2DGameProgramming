@@ -92,8 +92,8 @@ class GameState:
             view_dir_y /= view_dis
 
         self.player.update(view_dir_x, view_dir_y, self.monsters)
-        player_half_w = self.player.spr.image.w * 0.5
-        player_half_h = self.player.spr.image.h * 0.5
+        player_half_w = self.player.collision_box_w * 0.5
+        player_half_h = self.player.collision_box_h * 0.5
         player_left = self.player.spr.x - player_half_w
         player_right = self.player.spr.x + player_half_w
         player_bottom = self.player.spr.y - player_half_h
@@ -108,7 +108,9 @@ class GameState:
                 
                 if mob.dead_time >= 2.0:
                     self.monsters.remove(mob)
-                else:
+                    continue
+                
+                if mob.creator and mob.spr.active > 0.0:
                     mob_half_w = mob.collision_box_w * 0.5
                     mob_half_h = mob.collision_box_h * 0.5
                     mob_left = mob.spr.x - mob_half_w

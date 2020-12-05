@@ -34,6 +34,9 @@ class Player:
         self.skill = core.Sprite('./res/skill.png')
         self.skill.active = False
         core.renderer.Add(self.skill)
+
+        self.collision_box_w = 32
+        self.collision_box_h = 32
         
         self.speed_x = 0.0
         self.speed_y = 0.0
