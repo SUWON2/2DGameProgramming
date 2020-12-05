@@ -71,7 +71,11 @@ class Particle:
             piece.scaleX = min(self.max_scale, piece.scaleX + self.scale_speed * core.delta_time)
             piece.scaleY = piece.scaleX
             piece.angle = min(self.max_angle, piece.angle + self.angle_speed * core.delta_time)
-            piece.alpha = min(self.max_alpha, piece.alpha + self.alpha_speed * core.delta_time)
+
+            if self.min_alpha < self.max_alpha:
+                piece.alpha = min(self.max_alpha, piece.alpha + self.alpha_speed * core.delta_time)
+            else:
+                piece.alpha = max(self.max_alpha, piece.alpha - self.alpha_speed * core.delta_time)
 
         self.move_velocity = max(0.0, self.move_velocity - self.move_dec_velocity)
 

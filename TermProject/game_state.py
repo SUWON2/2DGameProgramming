@@ -78,11 +78,7 @@ class GameState:
         if core.eh.get_key_down(SDLK_ESCAPE):
             core.pop_state()
             return
-
-        # if core.eh.get_key_down(SDLK_SPACE):
-        #     if self.player.spr.alpha >= 1.0:
-        #         self.player.hit()
-
+            
         view_dir_x = self.zoom_point.x + core.camera.x - self.player.spr.x
         view_dir_y = self.zoom_point.y + core.camera.y - self.player.spr.y
         view_dis = math.sqrt(view_dir_x ** 2 + view_dir_y ** 2)

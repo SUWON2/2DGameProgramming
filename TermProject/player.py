@@ -6,10 +6,9 @@ from bullet import Bullet
 from monster import Monster
 from particle import Particle
 
-ACC_VELOCITY = 100.0
-DEC_VELOCITY = 60.0
-MAX_VELOCITY = 600.0
 MAX_ATTACK_DELAY = 0.15
+MAX_DASH_DELAY = 0.3
+DASH_COST = 3.0
 
 class Player:
     BULLET_MAX_COUNT = 20
@@ -37,6 +36,10 @@ class Player:
 
         self.collision_box_w = 32
         self.collision_box_h = 32
+        self.acc_velocity = 100.0
+        self.dec_velocity = 60.0
+        self.max_velocity = 600.0
+        self.afterimage_delay = 0.0
         
         self.speed_x = 0.0
         self.speed_y = 0.0
@@ -48,14 +51,20 @@ class Player:
 
         self.skill_guage = 0.0
         self.skill_view_guage = 0.0
+
         self.dash_guage = 0.0
         self.dash_view_guage = 0.0
+        self.dash_delay = 0.0
 
         self.bullet_particles = []
         self.bullet_particles.append(Particle('./res/bullet_t_0.png', 1, 1))
         self.bullet_particles.append(Particle('./res/bullet_t_1.png', 1, 1))
         self.bullet_particles.append(Particle('./res/bullet_t_2.png', 1, 1))
         self.bullet_particle_index = 0;
+
+        self.dash_particles = [Particle('./res/player.png', 1, 1) for i in range(20)]
+        self.dash_particle_index = 0
+
 
     def __del__(self):
         for i in range(5):
@@ -70,25 +79,25 @@ class Player:
 
         if move_dir_x != 0.0:
             if move_dir_x > 0.0:
-                self.speed_x = min(self.speed_x + ACC_VELOCITY, MAX_VELOCITY)
+                self.speed_x = min(self.speed_x + self.acc_velocity, self.max_velocity)
             else:
-                self.speed_x = max(self.speed_x - ACC_VELOCITY, -MAX_VELOCITY)
+                self.speed_x = max(self.speed_x - self.acc_velocity, -self.max_velocity)
         else:
             if self.speed_x > 0.0:
-                self.speed_x = max(self.speed_x - DEC_VELOCITY, 0.0)
+                self.speed_x = max(self.speed_x - self.dec_velocity, 0.0)
             else:
-                self.speed_x = min(self.speed_x + DEC_VELOCITY, 0.0)
+                self.speed_x = min(self.speed_x + self.dec_velocity, 0.0)
 
         if move_dir_y != 0.0:
             if move_dir_y > 0.0:
-                self.speed_y = min(self.speed_y + ACC_VELOCITY, MAX_VELOCITY)
+                self.speed_y = min(self.speed_y + self.acc_velocity, self.max_velocity)
             else:
-                self.speed_y = max(self.speed_y - ACC_VELOCITY, -MAX_VELOCITY)
+                self.speed_y = max(self.speed_y - self.acc_velocity, -self.max_velocity)
         else:
             if self.speed_y > 0.0:
-                self.speed_y = max(self.speed_y - DEC_VELOCITY, 0.0)
+                self.speed_y = max(self.speed_y - self.dec_velocity, 0.0)
             else:
-                self.speed_y = min(self.speed_y + DEC_VELOCITY, 0.0)
+                self.speed_y = min(self.speed_y + self.dec_velocity, 0.0)
 
         final_speed_x = self.speed_x
         final_speed_y = self.speed_y
@@ -170,6 +179,39 @@ class Player:
         elif self.skill_guage >= 100.0:
             self.explode()
 
+        # 대쉬를 처리합니다.
+        if self.dash_guage >= DASH_COST and core.eh.get_key(core.eh.SDLK_LSHIFT):
+                self.dash_guage -= DASH_COST
+                self.acc_velocity = 150.0
+                self.dec_velocity = 100.0
+                self.max_velocity = 800.0
+
+                # 잔상 효과를 발생시킵니다.
+                self.afterimage_delay -= core.delta_time
+                if self.afterimage_delay <= 0.0:
+                    dash_particle = self.dash_particles[self.dash_particle_index]
+                    dash_particle.min_scale = 1.0
+                    dash_particle.min_alpha = 1.0
+                    dash_particle.max_alpha = 0.0
+                    dash_particle.alpha_speed = 2.5
+                    dash_particle.min_angle = self.spr.angle
+                    dash_particle.max_angle = self.spr.angle
+                    dash_particle.init(self.spr.x, self.spr.y, 1.0)
+
+                    self.dash_particle_index += 1
+                    if self.dash_particle_index >= len(self.dash_particles):
+                        self.dash_particle_index = 0
+                    
+                    self.afterimage_delay = 0.05
+        else:        
+            self.acc_velocity = 100.0
+            self.dec_velocity = 60.0
+            self.max_velocity = 600.0
+            self.afterimage_delay = 0.0
+
+        for i in self.dash_particles:
+            i.update()
+
         # hp를 표시합니다.
         if self.hp >= 0:
             hp_spr = self.hp_sprs[self.hp - 1]
@@ -181,6 +223,8 @@ class Player:
                 hp_spr.angle = 360.0
         
         self.spr.alpha = min(1.0, self.spr.alpha + core.delta_time * 0.3)
+
+        print(self.max_velocity)
 
     def explode(self):
         self.skill.active = True
