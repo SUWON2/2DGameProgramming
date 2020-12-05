@@ -21,6 +21,8 @@ def update():
             shake_duration = 0.0
 
 def clear():
+    global x, y
+    
     x = 0.0
     y = 0.0
 
