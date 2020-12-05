@@ -27,6 +27,9 @@ class Player:
         self.bullet_kind = 0
         self.bullets = [Bullet(self.bullet_kind) for i in range(0, self.BULLET_MAX_COUNT)]
 
+        self.guage = 0.0
+        self.view_guage = 0.0
+
         self.bullet_particles = []
         self.bullet_particles.append(Particle('./res/bullet_t_0.png', 1, 1))
         self.bullet_particles.append(Particle('./res/bullet_t_1.png', 1, 1))
