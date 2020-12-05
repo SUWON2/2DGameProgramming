@@ -46,19 +46,34 @@ class GameState:
         self.score_text.text = 'SCORE: 0'
         core.renderer.Add(self.score_text)
         
-        self.guage_back_spr = core.Sprite('./res/player_guage_back.png')
-        self.guage_back_spr.camera_ignorer = True
-        self.guage_back_spr.x = core.const.SCREEN_WIDTH * 0.5
-        self.guage_back_spr.y = 25.0
-        core.renderer.Add(self.guage_back_spr)
+        self.skill_guage_back_spr = core.Sprite('./res/guage_back.png')
+        self.skill_guage_back_spr.camera_ignorer = True
+        self.skill_guage_back_spr.x = core.const.SCREEN_WIDTH * 0.5
+        self.skill_guage_back_spr.y = 25.0
+        core.renderer.Add(self.skill_guage_back_spr)
 
-        self.guage_spr = core.Sprite('./res/player_guage.png')
-        self.guage_spr.camera_ignorer = True
-        self.guage_spr.x = self.guage_back_spr.x
-        self.guage_spr.y = self.guage_back_spr.y
-        self.guage_spr.origin_y = self.guage_back_spr.origin_y
-        self.guage_spr.scaleX = 0.0
-        core.renderer.Add(self.guage_spr)
+        self.skill_guage_spr = core.Sprite('./res/skill_guage.png')
+        self.skill_guage_spr.camera_ignorer = True
+        self.skill_guage_spr.x = self.skill_guage_back_spr.x
+        self.skill_guage_spr.y = self.skill_guage_back_spr.y
+        self.skill_guage_spr.origin_y = self.skill_guage_back_spr.origin_y
+        self.skill_guage_spr.scaleX = 0.0
+        core.renderer.Add(self.skill_guage_spr)
+
+        self.dash_guage_back_spr = core.Sprite('./res/guage_back.png')
+        self.dash_guage_back_spr.camera_ignorer = True
+        self.dash_guage_back_spr.x = core.const.SCREEN_WIDTH * 0.5
+        self.dash_guage_back_spr.y = 45.0
+        core.renderer.Add(self.dash_guage_back_spr)
+
+        self.dash_guage_spr = core.Sprite('./res/dash_guage.png')
+        self.dash_guage_spr.camera_ignorer = True
+        self.dash_guage_spr.x = self.dash_guage_back_spr.x
+        self.dash_guage_spr.y = self.dash_guage_back_spr.y
+        self.dash_guage_spr.origin_y = self.dash_guage_back_spr.origin_y
+        self.dash_guage_spr.scaleX = 0.0
+        core.renderer.Add(self.dash_guage_spr)
+
 
     def update(self):
         if core.eh.get_key_down(SDLK_ESCAPE):
@@ -79,15 +94,12 @@ class GameState:
         for mob in self.monsters:
                 if mob.update(self.player.spr.x, self.player.spr.y) == False:
                     self.score += mob.score
-                    self.player.guage = min(self.player.guage + random.uniform(5.0, 7.0), 100.0)
+                    self.player.skill_guage = min(self.player.skill_guage + random.uniform(5.0, 7.0), 100.0)
                     self.monsters.remove(mob)
 
-        if self.view_score < self.score:
-            self.view_score = min(int(self.view_score + 120.0 * core.delta_time), self.score)
-            self.score_text.text = 'score: ' + str(self.view_score)
-
-        self.__update_zoom(view_dir_x, view_dir_y, view_dis)
+        self.__update_score()
         self.__update_guage()
+        self.__update_zoom(view_dir_x, view_dir_y, view_dis)
         self.__update_camera()
 
         # 몬스터를 주기적으로 생성합니다.
@@ -123,10 +135,19 @@ class GameState:
         self.zoom_outer.scaleX = zoom_scale
         self.zoom_outer.scaleY = zoom_scale
 
+    def __update_score(self):
+        if self.view_score < self.score:
+            self.view_score = min(int(self.view_score + 120.0 * core.delta_time), self.score)
+            self.score_text.text = 'score: ' + str(self.view_score)
+
     def __update_guage(self):
-        self.player.view_guage += (self.player.guage - self.player.view_guage) * 5.0 * core.delta_time
-        self.guage_spr.scaleX = self.player.view_guage / 100.0
-        self.guage_spr.x = self.guage_back_spr.x - self.guage_spr.image.w * (1 - self.guage_spr.scaleX) * 0.5
+        self.player.skill_view_guage += (self.player.skill_guage - self.player.skill_view_guage) * 5.0 * core.delta_time + 0.025
+        self.skill_guage_spr.scaleX = self.player.skill_view_guage / 100.0
+        self.skill_guage_spr.x = self.skill_guage_back_spr.x - self.skill_guage_spr.image.w * (1 - self.skill_guage_spr.scaleX) * 0.5
+
+        self.player.dash_view_guage += (self.player.dash_guage - self.player.dash_view_guage) * 5.0 * core.delta_time + 0.025
+        self.dash_guage_spr.scaleX = self.player.dash_view_guage / 100.0
+        self.dash_guage_spr.x = self.dash_guage_back_spr.x - self.dash_guage_spr.image.w * (1 - self.dash_guage_spr.scaleX) * 0.5
 
     def __update_camera(self):
         CAMERA_VELOCITY = 8

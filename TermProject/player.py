@@ -27,8 +27,10 @@ class Player:
         self.bullet_kind = 0
         self.bullets = [Bullet(self.bullet_kind) for i in range(0, self.BULLET_MAX_COUNT)]
 
-        self.guage = 0.0
-        self.view_guage = 0.0
+        self.skill_guage = 0.0
+        self.skill_view_guage = 0.0
+        self.dash_guage = 0.0
+        self.dash_view_guage = 0.0
 
         self.bullet_particles = []
         self.bullet_particles.append(Particle('./res/bullet_t_0.png', 1, 1))
@@ -86,6 +88,8 @@ class Player:
 
         if self.attack_delay >= 0.0:
             self.attack_delay -= core.delta_time
+
+        self.dash_guage = min(self.dash_guage + core.delta_time * 15.0, 100.0)
 
         if core.eh.get_mouse_button(core.eh.LBUTTON) and self.attack_delay <= 0.0:
             bullet = None
