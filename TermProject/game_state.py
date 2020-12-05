@@ -13,6 +13,9 @@ class GameState:
         self.bgm.set_volume(48)
         self.bgm.repeat_play()
 
+        self.game_over_sound = load_music('./res/game_over.mp3')
+        self.game_over_sound.set_volume(128)
+
         background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
         background.x = core.const.SCREEN_WIDTH / 2
@@ -27,7 +30,7 @@ class GameState:
         self.monsters = []
         self.monster_kinds = [ Monster1, Monster2, Monster3, Monster4 ]
         self.monster_max_count = 20
-        self.monster_creator_delay = 2.0
+        self.monster_creator_delay = 0.5
         self.monster_creator_elapsed_time = 0.0
 
         self.zoom_point = core.Sprite('./res/zoom_point.png')
@@ -74,9 +77,18 @@ class GameState:
         self.dash_guage_spr.scaleX = 0.0
         core.renderer.Add(self.dash_guage_spr)
 
+        self.game_over = False
+        self.game_over_elapsed_time = 0.0
+
+        self.screen_change_background = None
+
     def update(self):
-        if core.eh.get_key_down(SDLK_ESCAPE):
-            core.pop_state()
+        if self.game_over:
+            self.game_over_elapsed_time += core.delta_time
+            if self.game_over_elapsed_time >= 2.0:
+                self.screen_change_background.alpha += core.delta_time * 0.7
+                if self.screen_change_background.alpha >= 1.0:
+                    core.pop_state()
             return
             
         view_dir_x = self.zoom_point.x + core.camera.x - self.player.spr.x
@@ -94,7 +106,6 @@ class GameState:
         player_right = self.player.spr.x + player_half_w
         player_bottom = self.player.spr.y - player_half_h
         player_top = self.player.spr.y + player_half_h
-
 
         # 몬스터를 업데이트하고, 플레이어와 충돌 처리를 확인합니다
         for mob in self.monsters:
@@ -117,6 +128,19 @@ class GameState:
                 if player_left <= mob_right and player_right >= mob_left and player_bottom <= mob_top and player_top >= mob_bottom:
                     if self.player.spr.alpha >= 1.0:
                         self.player.hit()
+
+                        # 게임이 종료되는지 확인합니다.
+                        if self.player.hp <= 0.0:
+                            self.game_over = True
+                            self.game_over_sound.play()
+
+                            self.screen_change_background = core.Sprite('./res/screen_change_background.png')
+                            self.screen_change_background.camera_ignorer = True
+                            self.screen_change_background.x = core.const.SCREEN_WIDTH / 2
+                            self.screen_change_background.y = core.const.SCREEN_HEIGHT / 2
+                            self.screen_change_background.alpha = 0.0
+                            core.renderer.Add(self.screen_change_background)
+                            return
 
         self.__update_score()
         self.__update_guage()
