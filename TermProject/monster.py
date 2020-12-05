@@ -30,6 +30,7 @@ class Monster:
 
         self.collision_box_w = 48
         self.collision_box_h = 48
+        self.score = 10
 
         self.creator_particle = Particle('./res/mob_creator.png', 1, 1)
         self.creator_particle.min_scale = 0.0
@@ -67,7 +68,6 @@ class Monster:
         self.aimless_turn_delay = 0.0
 
         self.creator = False
-        self.score = 10
 
         self.creator_particle.init(self.spr.x, self.spr.y, 1.0)
 
