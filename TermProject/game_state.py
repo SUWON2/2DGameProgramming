@@ -16,7 +16,6 @@ class GameState:
         self.bgm.repeat_play()
 
         self.game_over_sound = load_music('./res/game_over.mp3')
-        self.game_over_sound.set_volume(128)
 
         background = core.Sprite('./res/background.png')
         background.camera_ignorer = True
@@ -171,8 +170,11 @@ class GameState:
                         # 게임이 종료되는지 확인합니다.
                         if self.player.hp <= 0.0:
                             self.game_over = True
-                            self.game_over_sound.play()
 
+                            self.bgm.stop()
+                            self.game_over_sound.set_volume(127)
+                            self.game_over_sound.play()
+                            
                             self.__create_screen_change_background()
                             return
 
