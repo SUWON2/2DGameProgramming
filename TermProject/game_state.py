@@ -175,6 +175,23 @@ class GameState:
                             self.game_over_sound.set_volume(127)
                             self.game_over_sound.play()
 
+                            scores = [ 0, 0, 0 ]
+
+                            # 기존 스코어를 불러옵니다.
+                            if os.path.exists('data.txt'):
+                                with open('data.txt', 'r') as f:
+                                    for i in range(3):
+                                        scores[i] = int(f.readline())
+                            
+                            scores.append(self.score)
+                            scores.sort()
+                            scores.reverse()
+
+                            # 갱신된 스코어를 저장합니다.
+                            with open('data.txt', 'w') as f:
+                                for i in range(3):
+                                    f.write(str(int(scores[i])) + '\n')
+
                             self.__create_screen_change_background()
                             return
 
