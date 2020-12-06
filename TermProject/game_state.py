@@ -174,7 +174,7 @@ class GameState:
                             self.bgm.stop()
                             self.game_over_sound.set_volume(127)
                             self.game_over_sound.play()
-                            
+
                             self.__create_screen_change_background()
                             return
 
@@ -217,9 +217,11 @@ class GameState:
         self.zoom_outer.scaleY = zoom_scale
 
     def __update_score(self):
+        self.score += 2.0 * core.delta_time
+
         if self.view_score < self.score:
             self.view_score = min(int(self.view_score + 120.0 * core.delta_time), self.score)
-            self.score_text.text = 'score: ' + str(self.view_score)
+            self.score_text.text = 'score: ' + str(int(self.view_score))
 
     def __update_guage(self):
         self.player.skill_view_guage += (self.player.skill_guage - self.player.skill_view_guage) * 5.0 * core.delta_time + 0.025
