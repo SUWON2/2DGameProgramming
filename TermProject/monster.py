@@ -69,7 +69,7 @@ class Monster:
         self.aimless_turn_delay = 0.0
 
         self.creator = False
-        self.creator_particle.init(self.spr.x, self.spr.y, 1.0)
+        self.creator_particle.init(self.spr.x, self.spr.y, 2.0)
 
     # return: 몬스터가 바로 직전에 죽은 경우 F, 그게 아닌 경우 T를 반환
     def update(self, player_x, player_y):
