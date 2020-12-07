@@ -245,7 +245,7 @@ class Player:
 
         self.hp -= 1
         self.hp_sprs[self.hp].active = False
-        self.max_attack_delay -= 0.007
+        self.max_attack_delay -= 0.012
 
         if self.hp > 0:
             hp_spr = self.hp_sprs[self.hp - 1]
